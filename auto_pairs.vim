@@ -1,5 +1,5 @@
 " 输入回车时自动缩进
-let g:AutoPairsMapCR = 1
+let g:AutoPairsMapCR = 0
 
 " 当输入引号或括号时，若后面已有相同符号则跳过而不是重复插入
 let g:AutoPairsFlyMode = 1

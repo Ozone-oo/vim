@@ -3,17 +3,24 @@
 let s:plugin_dir = expand('~/.vim/plugged')
 
 " Install a plugin if it doesn't exist
-function! s:ensure(repo)
+function! s:ensure(repo, ...) abort
   let name = split(a:repo, '/')[-1]
   let path = s:plugin_dir . '/' . name
-  
+
+  " branch 参数可选（第二个参数）
+  let branch = get(a:000, 0, '')
+
   if !isdirectory(path)
     if !isdirectory(s:plugin_dir)
       call mkdir(s:plugin_dir, 'p')
     endif
-    execute '!git clone --depth=1 https://github.com/' . a:repo . ' ' . shellescape(path)
+    if branch != ''
+      execute '!git clone --depth=1 --branch ' . branch . ' https://github.com/' . a:repo . ' ' . shellescape(path)
+    else
+      execute '!git clone --depth=1 https://github.com/' . a:repo . ' ' . shellescape(path)
+    endif
   endif
-  
+
   execute 'set runtimepath+=' . fnameescape(path)
 endfunction
 
@@ -28,8 +35,9 @@ call s:ensure('sheerun/vim-polyglot')
 call s:ensure('tpope/vim-commentary')
 call s:ensure('itchyny/lightline.vim')
 call s:ensure('jiangmiao/auto-pairs')
-call s:ensure('prabirshrestha/vim-lsp')
+" call s:ensure('prabirshrestha/vim-lsp')
 " call s:ensure('mattn/vim-lsp-settings')
-call s:ensure('prabirshrestha/asyncomplete.vim')
-call s:ensure('prabirshrestha/asyncomplete-lsp.vim')
+" call s:ensure('prabirshrestha/asyncomplete.vim')
+" call s:ensure('prabirshrestha/asyncomplete-lsp.vim')
 call s:ensure('jeetsukumaran/vim-pythonsense')
+call s:ensure('neoclide/coc.nvim', 'release')

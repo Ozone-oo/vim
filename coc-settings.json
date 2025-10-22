@@ -1,0 +1,22 @@
+{
+  // —— Pyright 分析/类型检查 —— //
+  "python.analysis.typeCheckingMode": "basic",       // 可改 strict
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.useLibraryCodeForTypes": true,
+  "python.analysis.diagnosticMode": "workspace",    // 大仓库卡顿可改 openFilesOnly
+
+  // —— 解释器/虚拟环境 —— //
+  // 推荐使用虚拟环境，Pyright会自动检测常见目录（.venv/venv）
+  // 如需手动指定，放开下一行并改成你的解释器路径：
+  "python.pythonPath": "/home/ouzhilong/.conda/envs/torch/bin/python3",
+  // "python.venvPath": "~/.virtualenvs",              // 你常放 venv 的目录（按需调整）
+
+  // —— 格式化 & 导入 —— //
+  "python.formatting.provider": "black",
+  "coc.preferences.formatOnSaveFiletypes": ["python"],
+
+  // —— 体验小优化 —— //
+  "suggest.noselect": false,
+  "suggest.enablePreview": true,
+  "diagnostic.virtualText": true
+}
