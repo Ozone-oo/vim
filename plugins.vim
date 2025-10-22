@@ -41,3 +41,5 @@ call s:ensure('jiangmiao/auto-pairs')
 " call s:ensure('prabirshrestha/asyncomplete-lsp.vim')
 call s:ensure('jeetsukumaran/vim-pythonsense')
 call s:ensure('neoclide/coc.nvim', 'release')
+call s:ensure('liuchengxu/vista.vim')
+
