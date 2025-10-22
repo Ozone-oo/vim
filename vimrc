@@ -1,0 +1,10 @@
+source ~/.vim/options.vim
+source ~/.vim/keybinds.vim
+source ~/.vim/plugins.vim
+source ~/.vim/colors.vim
+source ~/.vim/fzf.vim
+source ~/.vim/lightline.vim
+source ~/.vim/syntax.vim
+source ~/.vim/lsp.vim
+source ~/.vim/async_complete.vim
+source ~/.vim/auto_pairs.vim
