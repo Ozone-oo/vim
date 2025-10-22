@@ -15,3 +15,4 @@ map <buffer> [m <Plug>(PythonsenseStartOfPythonFunction)
 map <buffer> [M <Plug>(PythonsenseEndOfPreviousPythonFunction)
 
 map <buffer> g: <Plug>(PythonsensePyWhere)
+" debug
