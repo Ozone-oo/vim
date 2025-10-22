@@ -88,6 +88,11 @@ nnoremap <Leader>wk <C-W><C-K>
 " 向下
 nnoremap <Leader>wj <C-W><C-J>
 
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+
 nnoremap <leader>n :bn<CR>
 nnoremap <leader>p :bp<CR>
 nnoremap <leader>d :bd<CR>
