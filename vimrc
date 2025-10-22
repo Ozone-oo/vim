@@ -8,3 +8,4 @@ source ~/.vim/syntax.vim
 source ~/.vim/lsp.vim
 source ~/.vim/async_complete.vim
 source ~/.vim/auto_pairs.vim
+source ~/.vim/pythonsense.vim
