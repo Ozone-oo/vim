@@ -67,18 +67,19 @@ nmap <Leader>v :Vex<CR>
 
 " 定义快捷键 关闭当前分割窗口
 nmap <Leader>q :q<CR>
-" " 定义快捷键
+
+" 定义快捷键
 nmap <Leader>w :w<CR>
-" " 删除光标所在单词
+
+" 删除光标所在单词
 nmap e daw
 
+nmap <Leader>r :%s/a/b/gc
 " 快速移动到行首，行尾
 map <Leader>1 ^
 map <Leader>2 $
-
 " 设置快捷键gs遍历各分割窗口。快捷键速记法：goto the next spilt window
 nnoremap <Leader>gg <C-W><C-W>
-
 " 向左
 nnoremap <leader>wh <C-W><C-H>
 " 向右
@@ -93,6 +94,4 @@ inoremap <C-l> <Right>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 
-nnoremap <leader>n :bn<CR>
-nnoremap <leader>p :bp<CR>
 nnoremap <leader>d :bd<CR>

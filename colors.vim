@@ -3,4 +3,4 @@
 
 " colorscheme tokyonight
 set background=light
-colorscheme one
+colorscheme one 

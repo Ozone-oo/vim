@@ -4,9 +4,8 @@ source ~/.vim/plugins.vim
 source ~/.vim/colors.vim
 source ~/.vim/fzf.vim
 source ~/.vim/lightline.vim
+source ~/.vim/auto_pairs.vim
 source ~/.vim/syntax.vim
-" source ~/.vim/lsp.vim
 source ~/.vim/async_complete.vim
+source ~/.vim/nerdtree.vim
 source ~/.vim/outline.vim
-" source ~/.vim/auto_pairs.vim
-" source ~/.vim/pythonsense.vim

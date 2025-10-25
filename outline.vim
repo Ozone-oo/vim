@@ -23,5 +23,5 @@ let g:vista#renderer#icons = {
 \   "variable": "\uf71b",
 \  }
 " 快捷键：开关右侧大纲
-nnoremap <silent> <leader>b :Vista!!<CR>
-nnoremap <silent> <leader>a :Vista show<CR>
+nnoremap <silent> <leader>m :Vista!!<CR>
+nnoremap <silent> <leader>mm :Vista show<CR>
