@@ -95,3 +95,43 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 
 nnoremap <leader>d :bd<CR>
+
+" shortcut for markdown
+" 创建时间快捷键for markdown
+nmap tm :call SetTime() <CR>
+func SetTime()
+        call append(line("."), "\# ".strftime('%a %d %b %Y'))
+endfunc
+
+nmap tb :call SetTable() <CR>
+func SetTable()
+        call append(line("."), "\| | | ")
+        call append(line(".")+1, "\|---|---|")
+        call append(line(".")+2, "\| | |")
+endfunc
+
+nmap pc :call SetPic() <CR>
+func SetPic()
+        call append(line("."), "\<img src='' width=600 alt=''> </img></div>")
+endfunc
+
+nmap pi :call SetPic1() <CR>
+func SetPic1()
+        call append(line("."), "\![]()")
+endfunc
+
+nmap vi :call SetVideo() <CR>
+func SetVideo()
+        call append(line("."), "\<video src='1.mp4' controls='controls' width='640' height='320' autoplay='autoplay'> Your browser does not support the video tag.</video></div>")
+endfunc
+
+nmap cl :call SetCollor() <CR>
+func SetCollor()
+        call append(line("."), "<span  style='color: #f16707;'> </span>")
+endfunc
+
+" vim cc
+nmap cc :call SetCC() <CR>
+func SetCC()
+    call append(line("."), "// vim: et tw=100 ts=4 sw=4 cc=120")
+endfunc
