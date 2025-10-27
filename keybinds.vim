@@ -36,8 +36,8 @@ nnoremap <leader>cl :lclose<CR>
 nnoremap Q <nop>
 
 " Location list navigation
-nnoremap <leader>k :lnext<CR>zz
-nnoremap <leader>j :lprev<CR>zz
+" nnoremap <leader>k :lnext<CR>zz
+" nnoremap <leader>j :lprev<CR>zz
 
 " Doge doc generator
 nnoremap <leader>dg :DogeGenerate<CR>
@@ -81,13 +81,13 @@ map <Leader>2 $
 " 设置快捷键gs遍历各分割窗口。快捷键速记法：goto the next spilt window
 nnoremap <Leader>gg <C-W><C-W>
 " 向左
-nnoremap <leader>wh <C-W><C-H>
+nnoremap <leader>h <C-W><C-H>
 " 向右
-nnoremap <leader>wl <C-W><C-L>
+nnoremap <leader>l <C-W><C-L>
 " 向上
-nnoremap <Leader>wk <C-W><C-K>
+nnoremap <Leader>k <C-W><C-K>
 " 向下
-nnoremap <Leader>wj <C-W><C-J>
+nnoremap <Leader>j <C-W><C-J>
 
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>

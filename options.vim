@@ -8,6 +8,8 @@ set noswapfile
 " Line numbers
 set number
 set relativenumber
+set ruler
+set autowrite
 
 " Indentation and tabs
 set tabstop=4
@@ -44,4 +46,4 @@ set updatetime=50
 
 set laststatus=2
 
-set ruler
+set autoread
