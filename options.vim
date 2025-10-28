@@ -56,4 +56,4 @@ set updatetime=50
 
 set laststatus=2
 
-set autoread
+set shortmess=atI
