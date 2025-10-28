@@ -12,5 +12,8 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 nnoremap <silent> <Leader>n  :NERDTreeToggle <CR> 
 " 设置NERDTree子窗口位置
 let NERDTreeWinPos="left"
+
+let NERDTreeShowLineNumbers=1 " 显示行号
+
 " 设置忽略的文件
 let NERDTreeIgnore=['\.vim$', '\~$', '\.o$', '\.d$', '\.a$', '\.out$', '\.tgz$']

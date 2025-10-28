@@ -3,8 +3,16 @@ set softtabstop=4
 set smartindent
 set showmatch
 set termguicolors
+syntax enable
 syntax on
+set t_Co=256
+
 set noswapfile
+set nobackup
+set autoread
+set autowrite
+set confirm
+
 " Line numbers
 set number
 set relativenumber
@@ -18,6 +26,7 @@ set autoindent
 set expandtab
 
 " Search
+set hlsearch
 set ignorecase
 set smartcase
 set incsearch
@@ -41,6 +50,7 @@ set iskeyword+=-
 " Keep cursor 8 lines from top/bottom
 set scrolloff=8
 
+set ttimeoutlen=0
 " Cursor responsiveness
 set updatetime=50
 
