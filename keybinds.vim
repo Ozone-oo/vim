@@ -89,6 +89,7 @@ nnoremap <Leader>k <C-W><C-K>
 " 向下
 nnoremap <Leader>j <C-W><C-J>
 
+nmap <Leader>t :Tab /
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 inoremap <C-j> <Down>
