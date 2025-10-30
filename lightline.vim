@@ -5,7 +5,7 @@ let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#shorten_path = 1
 
 let g:lightline = {
-      \ 'colorscheme' : 'default',
+      \ 'colorscheme' : 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],

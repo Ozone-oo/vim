@@ -2,6 +2,6 @@
 " let g:tokyonight_enable_italic = 1
 
 " colorscheme tokyonight
-set background=light
-" colorscheme one 
-colorscheme desert 
+set background=dark
+colorscheme one 
+" colorscheme desert 

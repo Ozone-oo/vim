@@ -78,6 +78,8 @@ nmap <Leader>r :%s/a/b/gc
 " 快速移动到行首，行尾
 map <Leader>1 ^
 map <Leader>2 $
+nmap <Leader>u <C-U>
+nmap <Leader>d <C-D>
 " 设置快捷键gs遍历各分割窗口。快捷键速记法：goto the next spilt window
 nnoremap <Leader>gg <C-W><C-W>
 " 向左
@@ -95,7 +97,7 @@ inoremap <C-l> <Right>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 
-nnoremap <leader>d :bd<CR>
+nnoremap <leader>bd :bd<CR>
 
 " shortcut for markdown
 " 创建时间快捷键for markdown

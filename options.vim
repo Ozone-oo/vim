@@ -52,7 +52,7 @@ set scrolloff=8
 
 set ttimeoutlen=0
 " Cursor responsiveness
-set updatetime=50
+set updatetime=300
 
 set laststatus=2
 
