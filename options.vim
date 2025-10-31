@@ -32,7 +32,6 @@ set smartcase
 set incsearch
 
 " Appearance
-set background=dark
 set signcolumn=yes
 set cursorline
 set colorcolumn=80
@@ -57,3 +56,5 @@ set updatetime=300
 set laststatus=2
 
 set shortmess=atI
+
+set clipboard=unnamed
