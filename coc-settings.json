@@ -11,12 +11,19 @@
   "python.pythonPath": "/home/ouzhilong/.conda/envs/torch/bin/python3",
   // "python.venvPath": "~/.virtualenvs",              // 你常放 venv 的目录（按需调整）
 
-  // —— 格式化 & 导入 —— //
-  "python.formatting.provider": "black",
-  "coc.preferences.formatOnSaveFiletypes": ["python"],
+  // ===== Ruff as linter =====
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  "python.linting.ruffPath": "ruff",        // or absolute path
+  "python.linting.ruffArgs": [
+    // "--fix"       // enable if you want autofix on save via linting (careful)
+  ],
 
+  // ===== Ruff as formatter (optional) =====
+  "python.formatting.provider": "ruff",
+  "python.formatting.ruffPath": "ruff",
   // —— 体验小优化 —— //
   "suggest.noselect": false,
   "suggest.enablePreview": true,
-  "diagnostic.virtualText": true
+  "diagnostic.virtualText": true,
 }

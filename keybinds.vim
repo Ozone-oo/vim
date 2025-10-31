@@ -123,18 +123,13 @@ func SetPic1()
         call append(line("."), "\![]()")
 endfunc
 
-nmap vi :call SetVideo() <CR>
-func SetVideo()
-        call append(line("."), "\<video src='1.mp4' controls='controls' width='640' height='320' autoplay='autoplay'> Your browser does not support the video tag.</video></div>")
-endfunc
+" nmap vi :call SetVideo() <CR>
+" func SetVideo()
+"         call append(line("."), "\<video src='1.mp4' controls='controls' width='640' height='320' autoplay='autoplay'> Your browser does not support the video tag.</video></div>")
+" endfunc
 
 nmap cl :call SetCollor() <CR>
 func SetCollor()
         call append(line("."), "<span  style='color: #f16707;'> </span>")
 endfunc
 
-" vim cc
-nmap cc :call SetCC() <CR>
-func SetCC()
-    call append(line("."), "// vim: et tw=100 ts=4 sw=4 cc=120")
-endfunc
