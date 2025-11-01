@@ -18,6 +18,8 @@ set background=light
 " colorscheme base16-onedark
 " colorscheme base24-one-dark
 colorscheme base24-one-light
+" colorscheme base24-gruvbox-light
+" colorscheme gruvbox 
 " colorscheme one 
 " Set contrast.
 " This configuration option should be placed before `colorscheme everforest`.
