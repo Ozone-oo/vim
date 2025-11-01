@@ -1,6 +1,9 @@
 " Set leader key
 let mapleader = ";"
 
+nnoremap <Space> ;
+xnoremap <Space> ;
+onoremap <Space> ;
 " Open netrw with <leader>cd
 nnoremap <leader>cd :Ex<CR>
 
@@ -49,8 +52,8 @@ nnoremap <leader>s :s/\<<C-r><C-w>\>//gI<Left><Left><Left>
 nnoremap <leader>x :!chmod +x %<CR>
 
 " Yank via OSCYank
-nmap <leader>y <Plug>OSCYankOperator
-vmap <leader>y <Plug>OSCYankVisual
+nmap <Leader>y <Plug>OSCYankOperator
+vmap <Leader>y <Plug>OSCYankVisual
 
 " Reload vimrc (adjust path as needed)
 nnoremap <leader>rl :source ~/.vim/vimrc<CR>
