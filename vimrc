@@ -8,3 +8,4 @@ source ~/.vim/colors.vim
 source ~/.vim/async_complete.vim
 source ~/.vim/nerdtree.vim
 source ~/.vim/outline.vim
+source ~/.vim/bookmark.vim
