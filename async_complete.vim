@@ -1,3 +1,5 @@
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-highlight', 'coc-pyright', 'coc-sh', 'coc-yaml']
+ 
 " set completeopt=menuone,noinsert,noselect,preview
 " let g:asyncomplete_auto_popup = 1
 inoremap <silent><expr> <CR> pumvisible()
@@ -29,7 +31,8 @@ omap ac <Plug>(coc-classobj-a)
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
+autocmd CursorHold * silent call CocActionAsync('highlight')
+" let g:coc_default_semantic_highlight_groups = 1
 " Mappings for CoCList
 " Show all diagnostics
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
@@ -49,3 +52,10 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " nmap <Leader>n <Cmd>CocCommand explorer<CR>
+
+if has("autocmd") && exists("+omnifunc")
+	autocmd Filetype *
+        \	if &omnifunc == "" |
+        \		setlocal omnifunc=syntaxcomplete#Complete |
+        \	endif
+endif

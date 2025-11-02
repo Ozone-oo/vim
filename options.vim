@@ -6,6 +6,7 @@ set termguicolors
 syntax enable
 syntax on
 set t_Co=256
+set nocompatible
 
 set noswapfile
 set nobackup
