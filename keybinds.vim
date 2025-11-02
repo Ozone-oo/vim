@@ -28,8 +28,9 @@ nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
 " Make <C-c> behave like <Esc> in insert mode
-inoremap <C-c> <Esc>
-
+" inoremap <C-c> <Esc>
+nnoremap <C-c> ggVG$
+inoremap <C-c> <Esc>ggVG$
 " Navigate quickfix list using Ctrl-j/k
 nnoremap <C-j> :lnext<CR>
 nnoremap <C-k> :lprev<CR>
