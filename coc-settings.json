@@ -26,4 +26,5 @@
   "suggest.noselect": false,
   "suggest.enablePreview": true,
   "diagnostic.virtualText": true,
+  "inlayHint.enable": false
 }

@@ -53,9 +53,4 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " nmap <Leader>n <Cmd>CocCommand explorer<CR>
 
-if has("autocmd") && exists("+omnifunc")
-	autocmd Filetype *
-        \	if &omnifunc == "" |
-        \		setlocal omnifunc=syntaxcomplete#Complete |
-        \	endif
-endif
+
