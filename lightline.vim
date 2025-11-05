@@ -44,3 +44,25 @@ nmap <Leader>c7 <Plug>lightline#bufferline#delete(7)
 nmap <Leader>c8 <Plug>lightline#bufferline#delete(8)
 nmap <Leader>c9 <Plug>lightline#bufferline#delete(9)
 nmap <Leader>c0 <Plug>lightline#bufferline#delete(10)
+
+" 关闭当前 buffer，但保留窗口布局，不退出 Vim
+function! s:DeleteBufferKeepWindow() abort
+  let l:buf = bufnr('%')
+  let l:listed = getbufinfo({'buflisted': 1})
+
+  " 只有一个已列出的 buffer：先新建空缓冲，再删当前
+  if len(l:listed) <= 1
+    enew
+    execute 'bdelete ' . l:buf
+    return
+  endif
+
+  " 否则切到前一个，再删原来的；若没切走就试 bnext
+  bprevious
+  if bufnr('%') == l:buf
+    bnext
+  endif
+  execute 'bdelete ' . l:buf
+endfunction
+
+nnoremap <silent> <leader>bd :call <SID>DeleteBufferKeepWindow()<CR>

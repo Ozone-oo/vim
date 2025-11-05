@@ -10,14 +10,14 @@ if has('termguicolors')
 endif
 set t_Co=256
 " For dark version.
-" set background=dark
+set background=dark
 
 " For light version.
-set background=light
+" set background=light
 " colorscheme base16-one-light
 " colorscheme base16-onedark
-" colorscheme base24-one-dark
-colorscheme base24-one-light
+colorscheme base24-one-dark
+" colorscheme base24-one-light
 " colorscheme base24-gruvbox-light
 " colorscheme gruvbox 
 " colorscheme one 
