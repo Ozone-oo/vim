@@ -17,7 +17,7 @@ endif
 
 " GUI colors
 let s:gui00        = 'fafafa' "e7e7e9
-let s:gui01        = 'dfdfe1'
+let s:gui01        = 'f0f0f0' " dfdfe1
 let s:gui02        = 'cacace'
 let s:gui03        = 'a0a1a7'
 let s:gui04        = '696c77'

@@ -77,6 +77,11 @@ nmap <Leader>w :w<CR>
 
 " 删除光标所在单词
 nmap e daw
+" 快捷全选 / 复制 / 可视全选
+nmap die ggdG
+nmap yie ggyG
+nmap vie ggvG
+
 
 nmap <Leader>r :%s/a/b/gc
 " 快速移动到行首，行尾
@@ -102,7 +107,7 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 
 nnoremap <leader>bd :bd<CR>
-
+let curpwd = getcwd()
 " shortcut for markdown
 " 创建时间快捷键for markdown
 nmap tm :call SetTime() <CR>
