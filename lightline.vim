@@ -1,6 +1,7 @@
 set laststatus=2
 set showtabline=2       " 总是显示 tabline（否则顶栏可能不出现）
 
+" 交给 flagship 生成整条 statusline / tabline
 let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#shorten_path = 1
 
@@ -65,4 +66,4 @@ function! s:DeleteBufferKeepWindow() abort
   execute 'bdelete ' . l:buf
 endfunction
 
-nnoremap <silent> <leader>bd :call <SID>DeleteBufferKeepWindow()<CR>
+nnoremap <silent> tabc :call <SID>DeleteBufferKeepWindow()<CR>

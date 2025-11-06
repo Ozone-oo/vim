@@ -45,4 +45,6 @@ call s:ensure('liuchengxu/vista.vim')
 " call s:ensure('vim-scripts/taglist.vim')
 call s:ensure('unblevable/quick-scope')
 call s:ensure('MattesGroeger/vim-bookmarks')
+call s:ensure('mg979/vim-visual-multi')
+call s:ensure('wellle/targets.vim')
 

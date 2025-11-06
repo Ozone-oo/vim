@@ -76,7 +76,7 @@ nmap <Leader>q :q<CR>
 nmap <Leader>w :w<CR>
 
 " 删除光标所在单词
-nmap e daw
+" nmap e daw
 " 快捷全选 / 复制 / 可视全选
 nmap die ggdG
 nmap yie ggyG

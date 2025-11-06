@@ -91,3 +91,7 @@ else
     autocmd VimLeave * silent !echo -ne "\e[5 q"
   endif
 endif
+
+set foldmethod=indent
+
+
