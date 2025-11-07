@@ -28,9 +28,7 @@ nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
 " Make <C-c> behave like <Esc> in insert mode
-" inoremap <C-c> <Esc>
-nnoremap <C-c> ggVG$
-inoremap <C-c> <Esc>ggVG$
+inoremap <C-c> <Esc>
 " Navigate quickfix list using Ctrl-j/k
 nnoremap <C-j> :lnext<CR>
 nnoremap <C-k> :lprev<CR>
@@ -78,9 +76,9 @@ nmap <Leader>w :w<CR>
 " 删除光标所在单词
 " nmap e daw
 " 快捷全选 / 复制 / 可视全选
-nmap die ggdG
-nmap yie ggyG
-nmap vie ggvG
+nmap die ggdG$
+nmap yie ggyG$
+nmap vie ggvG$
 
 
 nmap <Leader>r :%s/a/b/gc
