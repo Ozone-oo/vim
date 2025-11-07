@@ -140,3 +140,6 @@ func SetCollor()
         call append(line("."), "<span  style='color: #f16707;'> </span>")
 endfunc
 
+
+nnoremap <Space><Space> zr
+vnoremap <Space><Space> za <Esc>
