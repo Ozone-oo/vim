@@ -58,8 +58,9 @@ set laststatus=2
 
 set shortmess=atI
 
-set clipboard=unnamed
+set clipboard+=unnamed
 
+set foldmethod=indent
 if has('nvim')
   set guicursor=n-v-c-sm:block-blinkon100,i-ci-ve:ver25-blinkon100,r-cr-o:hor20-blinkon100
 else
@@ -91,7 +92,5 @@ else
     autocmd VimLeave * silent !echo -ne "\e[5 q"
   endif
 endif
-
-set foldmethod=indent
 
 

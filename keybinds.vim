@@ -22,10 +22,14 @@ nnoremap <C-u> <C-u>zz
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" Paste without overwriting clipboard
 xnoremap <leader>p "_dP
 nnoremap <leader>d "_d
-vnoremap <leader>d "_d
+xnoremap <leader>d "_d
+nnoremap <leader>D "_D
+
+nnoremap <leader>x "_x
+nnoremap <leader>X "_X
+xnoremap <leader>x "_x
 
 " Make <C-c> behave like <Esc> in insert mode
 inoremap <C-c> <Esc>
@@ -48,7 +52,7 @@ nnoremap <leader>dg :DogeGenerate<CR>
 nnoremap <leader>s :s/\<<C-r><C-w>\>//gI<Left><Left><Left>
 
 " Make current file executable
-nnoremap <leader>x :!chmod +x %<CR>
+" nnoremap <leader>x :!chmod +x %<CR>
 
 " Yank via OSCYank
 nmap <Leader>y <Plug>OSCYankOperator
@@ -82,11 +86,10 @@ nmap vie ggvG$
 
 
 nmap <Leader>r :%s/a/b/gc
-" 快速移动到行首，行尾
 map <Leader>1 ^
 map <Leader>2 $
-nmap <Leader>u <C-U>
-nmap <Leader>d <C-D>
+" nmap <Leader>u <C-U>
+" nmap <Leader>d <C-D>
 " 设置快捷键gs遍历各分割窗口。快捷键速记法：goto the next spilt window
 nnoremap <Leader>gg <C-W><C-W>
 " 向左
@@ -143,3 +146,5 @@ endfunc
 
 nnoremap <Space><Space> zr
 vnoremap <Space><Space> za <Esc>
+
+
