@@ -13,6 +13,8 @@ vnoremap K :m '<-2<CR>gv=gv
 
 " Join lines with cursor preserved
 nnoremap J mzJ`z
+" nnoremap j jzz 
+" nnoremap k kzz
 
 " Scroll half-page and center cursor
 nnoremap <C-d> <C-d>zz
@@ -144,7 +146,7 @@ func SetCollor()
 endfunc
 
 
-nnoremap <Space><Space> zr
+nnoremap <Space><Space> zR
 vnoremap <Space><Space> za <Esc>
 
-
+nnoremap <Esc><Esc> :nohl<CR>

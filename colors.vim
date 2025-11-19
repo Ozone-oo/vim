@@ -16,7 +16,9 @@ set background=dark
 " set background=light
 " colorscheme base16-one-light
 " colorscheme base16-onedark
-colorscheme base24-one-dark
+" colorscheme base24-one-dark
+" colorscheme koehler
+colorscheme desert
 " colorscheme base24-one-light
 " colorscheme base24-gruvbox-light
 " colorscheme gruvbox 
