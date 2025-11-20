@@ -1408,240 +1408,1061 @@ set completeopt=menu,menuone,noselect
 
 " tokyonight color inside,donnot change it {{{
 set termguicolors
-let g:tokyonight_style = 'night' " available: night, storm
-let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
-let s:tmux = executable('tmux') && $TMUX !=# ''
-let g:colors_name = 'tokyonight'|let s:configuration = {}
-let s:configuration.style = get(g:, 'tokyonight_style', 'night')
-let s:configuration.transparent_background = get(g:, 'tokyonight_transparent_background', 0)
-let s:configuration.menu_selection_background = get(g:, 'tokyonight_menu_selection_background', 'green')
-let s:configuration.disable_italic_comment = get(g:, 'tokyonight_disable_italic_comment', 0)
-let s:configuration.enable_italic = get(g:, 'tokyonight_enable_italic', 0)
-let s:configuration.cursor = get(g:, 'tokyonight_cursor', 'auto')
-let s:configuration.current_word = get(g:, 'tokyonight_current_word', get(g:, 'tokyonight_transparent_background', 0) == 0 ? 'grey background' : 'bold')
-if s:configuration.style ==# 'night'
-	let s:palette = {
-				\ 'black':      ['#06080a',   '237',  'DarkGrey'],
-				\ 'bg0':        ['#1a1b26',   '235',  'Black'],
-				\ 'bg1':        ['#232433',   '236',  'DarkGrey'],
-				\ 'bg2':        ['#2a2b3d',   '236',  'DarkGrey'],
-				\ 'bg3':        ['#32344a',   '237',  'DarkGrey'],
-				\ 'bg4':        ['#3b3d57',   '237',  'Grey'],
-				\ 'bg_red':     ['#ff7a93',   '203',  'Red'],
-				\ 'diff_red':   ['#803d49',   '52',   'DarkRed'],
-				\ 'bg_green':   ['#b9f27c',   '107',  'Green'],
-				\ 'diff_green': ['#618041',   '22',   'DarkGreen'],
-				\ 'bg_blue':    ['#7da6ff',   '110',  'Blue'],
-				\ 'diff_blue':  ['#3e5380',   '17',   'DarkBlue'],
-				\ 'fg':         ['#a9b1d6',   '250',  'White'],
-				\ 'red':        ['#F7768E',   '203',  'Red'],
-				\ 'orange':     ['#FF9E64',   '215',  'Orange'],
-				\ 'yellow':     ['#E0AF68',   '179',  'Yellow'],
-				\ 'green':      ['#9ECE6A',   '107',  'Green'],
-				\ 'blue':       ['#7AA2F7',   '110',  'Blue'],
-				\ 'purple':     ['#ad8ee6',   '176',  'Magenta'],
-				\ 'grey':       ['#444B6A',   '246',  'LightGrey'],
-				\ 'none':       ['NONE',      'NONE', 'NONE']
-				\ }
-elseif s:configuration.style ==# 'storm'
-	let s:palette = {
-				\ 'black':      ['#06080a',   '237',  'DarkGrey'],
-				\ 'bg0':        ['#24283b',   '235',  'Black'],
-				\ 'bg1':        ['#282d42',   '236',  'DarkGrey'],
-				\ 'bg2':        ['#2f344d',   '236',  'DarkGrey'],
-				\ 'bg3':        ['#333954',   '237',  'DarkGrey'],
-				\ 'bg4':        ['#3a405e',   '237',  'Grey'],
-				\ 'bg_red':     ['#ff7a93',   '203',  'Red'],
-				\ 'diff_red':   ['#803d49',   '52',   'DarkRed'],
-				\ 'bg_green':   ['#b9f27c',   '107',  'Green'],
-				\ 'diff_green': ['#618041',   '22',   'DarkGreen'],
-				\ 'bg_blue':    ['#7da6ff',   '110',  'Blue'],
-				\ 'diff_blue':  ['#3e5380',   '17',   'DarkBlue'],
-				\ 'fg':         ['#a9b1d6',   '250',  'White'],
-				\ 'red':        ['#F7768E',   '203',  'Red'],
-				\ 'orange':     ['#FF9E64',   '215',  'Orange'],
-				\ 'yellow':     ['#E0AF68',   '179',  'Yellow'],
-				\ 'green':      ['#9ECE6A',   '107',  'Green'],
-				\ 'blue':       ['#7AA2F7',   '110',  'Blue'],
-				\ 'purple':     ['#ad8ee6',   '176',  'Magenta'],
-				\ 'grey':       ['#444B6A',   '246',  'LightGrey'],
-				\ 'none':       ['NONE',      'NONE', 'NONE']
-				\ }
-endif
-if (has('termguicolors') && &termguicolors) || has('gui_running')  " guifg guibg gui cterm guisp
-	function! s:HL(group, fg, bg, ...)
-		let hl_string = [ 'highlight', a:group, 'guifg=' . a:fg[0], 'guibg=' . a:bg[0], ]
-		if a:0 >= 1
-			if a:1 ==# 'undercurl'
-				if !s:tmux|call add(hl_string, 'gui=undercurl')
-				else|call add(hl_string, 'gui=underline')
-				endif
-				call add(hl_string, 'cterm=underline')
-			else|call add(hl_string, 'gui=' . a:1)|call add(hl_string, 'cterm=' . a:1)
-			endif
-		else|call add(hl_string, 'gui=NONE')|call add(hl_string, 'cterm=NONE')
-		endif
-		if a:0 >= 2|call add(hl_string, 'guisp=' . a:2[0])|endif
-		execute join(hl_string, ' ')
-	endfunction
-elseif s:t_Co >= 256
-	function! s:HL(group, fg, bg, ...)
-		let hl_string = [ 'highlight', a:group, 'ctermfg=' . a:fg[1], 'ctermbg=' . a:bg[1]]
-		if a:0 >= 1
-			if a:1 ==# 'undercurl'|call add(hl_string, 'cterm=underline')
-			else|call add(hl_string, 'cterm=' . a:1)
-			endif
-		else|call add(hl_string, 'cterm=NONE')
-		endif
-		execute join(hl_string, ' ')
-	endfunction
-else  " ctermfg ctermbg cterm
-	function! s:HL(group, fg, bg, ...)
-		let hl_string = [ 'highlight', a:group, 'ctermfg=' . a:fg[2], 'ctermbg=' . a:bg[2]]
-		if a:0 >= 1
-			if a:1 ==# 'undercurl'|call add(hl_string, 'cterm=underline')
-			else|call add(hl_string, 'cterm=' . a:1)
-			endif
-		else|call add(hl_string, 'cterm=NONE')
-		endif
-		execute join(hl_string, ' ')
-	endfunction
-endif
-if s:configuration.transparent_background
-	call s:HL('Normal', s:palette.fg, s:palette.none)
-	call s:HL('Terminal', s:palette.fg, s:palette.none)
-	call s:HL('EndOfBuffer', s:palette.bg0, s:palette.none)
-	call s:HL('FoldColumn', s:palette.grey, s:palette.none)
-	call s:HL('Folded', s:palette.grey, s:palette.none)
-	call s:HL('SignColumn', s:palette.fg, s:palette.none)
-	call s:HL('ToolbarLine', s:palette.fg, s:palette.none)
-else
-	call s:HL('Normal', s:palette.fg, s:palette.bg0)
-	call s:HL('Terminal', s:palette.fg, s:palette.bg0)
-	call s:HL('EndOfBuffer', s:palette.bg0, s:palette.bg0)
-	call s:HL('FoldColumn', s:palette.grey, s:palette.bg1)
-	call s:HL('Folded', s:palette.grey, s:palette.bg1)
-	call s:HL('SignColumn', s:palette.fg, s:palette.bg1)
-	call s:HL('ToolbarLine', s:palette.fg, s:palette.bg2)
-endif
-call s:HL('ColorColumn', s:palette.none, s:palette.bg1)
-call s:HL('Conceal', s:palette.grey, s:palette.none)
-if s:configuration.cursor ==# 'auto'|call s:HL('Cursor', s:palette.none, s:palette.none, 'reverse')
-elseif s:configuration.cursor ==# 'red'|call s:HL('Cursor', s:palette.bg0, s:palette.red)
-elseif s:configuration.cursor ==# 'green'|call s:HL('Cursor', s:palette.bg0, s:palette.green)
-elseif s:configuration.cursor ==# 'blue'|call s:HL('Cursor', s:palette.bg0, s:palette.blue)
-endif
-highlight! link vCursor Cursor
-highlight! link iCursor Cursor
-highlight! link lCursor Cursor
-highlight! link CursorIM Cursor
-call s:HL('CursorColumn', s:palette.none, s:palette.bg1)
-call s:HL('CursorLine', s:palette.none, s:palette.bg1)
-call s:HL('LineNr', s:palette.grey, s:palette.none)
-if &relativenumber == 1 && &cursorline == 0|call s:HL('CursorLineNr', s:palette.fg, s:palette.none)
-else|call s:HL('CursorLineNr', s:palette.fg, s:palette.bg1)
-endif
-call s:HL('DiffAdd', s:palette.none, s:palette.diff_green)
-call s:HL('DiffChange', s:palette.none, s:palette.diff_blue)
-call s:HL('DiffDelete', s:palette.none, s:palette.diff_red)
-call s:HL('DiffText', s:palette.none, s:palette.none, 'reverse')
-call s:HL('Directory', s:palette.green, s:palette.none)
-call s:HL('ErrorMsg', s:palette.red, s:palette.none, 'bold,underline')
-call s:HL('WarningMsg', s:palette.yellow, s:palette.none, 'bold')
-call s:HL('ModeMsg', s:palette.fg, s:palette.none, 'bold')
-call s:HL('MoreMsg', s:palette.blue, s:palette.none, 'bold')
-call s:HL('IncSearch', s:palette.bg0, s:palette.bg_red)
-call s:HL('Search', s:palette.bg0, s:palette.bg_green)
-call s:HL('MatchParen', s:palette.none, s:palette.bg4)
-call s:HL('NonText', s:palette.bg4, s:palette.none)
-call s:HL('Whitespace', s:palette.bg4, s:palette.none)
-call s:HL('SpecialKey', s:palette.bg4, s:palette.none)
-call s:HL('Pmenu', s:palette.fg, s:palette.bg2)
-call s:HL('PmenuSbar', s:palette.none, s:palette.bg2)
-if s:configuration.menu_selection_background ==# 'blue'
-	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_blue)
-	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_blue)
-elseif s:configuration.menu_selection_background ==# 'green'
-	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_green)
-	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_green)
-elseif s:configuration.menu_selection_background ==# 'red'
-	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_red)
-	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_red)
-endif
-call s:HL('PmenuThumb', s:palette.none, s:palette.grey)
-call s:HL('Question', s:palette.yellow, s:palette.none)
-call s:HL('SpellBad', s:palette.red, s:palette.none, 'undercurl', s:palette.red)
-call s:HL('SpellCap', s:palette.yellow, s:palette.none, 'undercurl', s:palette.yellow)
-call s:HL('SpellLocal', s:palette.blue, s:palette.none, 'undercurl', s:palette.blue)
-call s:HL('SpellRare', s:palette.purple, s:palette.none, 'undercurl', s:palette.purple)
-call s:HL('StatusLine', s:palette.fg, s:palette.bg3)
-call s:HL('StatusLineTerm', s:palette.fg, s:palette.bg3)
-call s:HL('StatusLineNC', s:palette.grey, s:palette.bg1)
-call s:HL('StatusLineTermNC', s:palette.grey, s:palette.bg1)
-call s:HL('TabLine', s:palette.fg, s:palette.bg4)
-call s:HL('TabLineFill', s:palette.grey, s:palette.bg1)
-call s:HL('TabLineSel', s:palette.bg0, s:palette.bg_red)
-call s:HL('VertSplit', s:palette.black, s:palette.none)
-call s:HL('Visual', s:palette.none, s:palette.bg3)
-call s:HL('VisualNOS', s:palette.none, s:palette.bg3, 'underline')
-call s:HL('QuickFixLine', s:palette.blue, s:palette.none, 'bold')
-call s:HL('Debug', s:palette.yellow, s:palette.none)
-call s:HL('debugPC', s:palette.bg0, s:palette.green)
-call s:HL('debugBreakpoint', s:palette.bg0, s:palette.red)
-call s:HL('ToolbarButton', s:palette.bg0, s:palette.bg_blue)
-call s:HL('Type', s:palette.blue, s:palette.none, 'italic')
-call s:HL('Structure', s:palette.blue, s:palette.none, 'italic')
-call s:HL('StorageClass', s:palette.blue, s:palette.none, 'italic')
-call s:HL('Identifier', s:palette.orange, s:palette.none, 'italic')
-call s:HL('Constant', s:palette.orange, s:palette.none, 'italic')
-call s:HL('PreProc', s:palette.red, s:palette.none)
-call s:HL('PreCondit', s:palette.red, s:palette.none)
-call s:HL('Include', s:palette.red, s:palette.none)
-call s:HL('Keyword', s:palette.red, s:palette.none)
-call s:HL('Define', s:palette.red, s:palette.none)
-call s:HL('Typedef', s:palette.red, s:palette.none)
-call s:HL('Exception', s:palette.red, s:palette.none)
-call s:HL('Conditional', s:palette.red, s:palette.none)
-call s:HL('Repeat', s:palette.red, s:palette.none)
-call s:HL('Statement', s:palette.red, s:palette.none)
-call s:HL('Macro', s:palette.purple, s:palette.none)
-call s:HL('Error', s:palette.red, s:palette.none)
-call s:HL('Label', s:palette.purple, s:palette.none)
-call s:HL('Special', s:palette.purple, s:palette.none)
-call s:HL('SpecialChar', s:palette.purple, s:palette.none)
-call s:HL('Boolean', s:palette.purple, s:palette.none)
-call s:HL('String', s:palette.yellow, s:palette.none)
-call s:HL('Character', s:palette.yellow, s:palette.none)
-call s:HL('Number', s:palette.purple, s:palette.none)
-call s:HL('Float', s:palette.purple, s:palette.none)
-call s:HL('Function', s:palette.green, s:palette.none)
-call s:HL('Operator', s:palette.red, s:palette.none)
-call s:HL('Title', s:palette.red, s:palette.none, 'bold')
-call s:HL('Tag', s:palette.orange, s:palette.none)
-call s:HL('Delimiter', s:palette.fg, s:palette.none)
-call s:HL('Comment', s:palette.grey, s:palette.none, 'italic')
-call s:HL('SpecialComment', s:palette.grey, s:palette.none, 'italic')
-call s:HL('Todo', s:palette.blue, s:palette.none, 'italic')
-call s:HL('Ignore', s:palette.grey, s:palette.none)
-call s:HL('Underlined', s:palette.none, s:palette.none, 'underline')
-call s:HL('Fg', s:palette.fg, s:palette.none)
-call s:HL('Grey', s:palette.grey, s:palette.none)
-call s:HL('Red', s:palette.red, s:palette.none)
-call s:HL('Orange', s:palette.orange, s:palette.none)
-call s:HL('Yellow', s:palette.yellow, s:palette.none)
-call s:HL('Green', s:palette.green, s:palette.none)
-call s:HL('Blue', s:palette.blue, s:palette.none)
-call s:HL('Purple', s:palette.purple, s:palette.none)
-call s:HL('RedItalic', s:palette.red, s:palette.none, 'italic')
-call s:HL('BlueItalic', s:palette.blue, s:palette.none, 'italic')
-call s:HL('OrangeItalic', s:palette.orange, s:palette.none, 'italic')
-let s:terminal = {
-			\ 'black':s:palette.black,'red':s:palette.red,'yellow':s:palette.yellow,'green':s:palette.green,
-			\ 'cyan':s:palette.orange,'blue':s:palette.blue,'purple':s:palette.purple,'white':s:palette.fg
-			\ }
-let g:terminal_ansi_colors = [s:terminal.black[0], s:terminal.red[0], s:terminal.green[0], s:terminal.yellow[0],
-			\ s:terminal.blue[0], s:terminal.purple[0], s:terminal.cyan[0], s:terminal.white[0], s:terminal.black[0], s:terminal.red[0],
-			\ s:terminal.green[0], s:terminal.yellow[0], s:terminal.blue[0], s:terminal.purple[0], s:terminal.cyan[0], s:terminal.white[0]]
+" let g:tokyonight_style = 'night' " available: night, storm
+" let s:t_Co = exists('&t_Co') && !empty(&t_Co) && &t_Co > 1 ? &t_Co : 2
+" let s:tmux = executable('tmux') && $TMUX !=# ''
+" let g:colors_name = 'tokyonight'|let s:configuration = {}
+" let s:configuration.style = get(g:, 'tokyonight_style', 'night')
+" let s:configuration.transparent_background = get(g:, 'tokyonight_transparent_background', 0)
+" let s:configuration.menu_selection_background = get(g:, 'tokyonight_menu_selection_background', 'green')
+" let s:configuration.disable_italic_comment = get(g:, 'tokyonight_disable_italic_comment', 0)
+" let s:configuration.enable_italic = get(g:, 'tokyonight_enable_italic', 0)
+" let s:configuration.cursor = get(g:, 'tokyonight_cursor', 'auto')
+" let s:configuration.current_word = get(g:, 'tokyonight_current_word', get(g:, 'tokyonight_transparent_background', 0) == 0 ? 'grey background' : 'bold')
+" if s:configuration.style ==# 'night'
+" 	let s:palette = {
+" 				\ 'black':      ['#06080a',   '237',  'DarkGrey'],
+" 				\ 'bg0':        ['#1a1b26',   '235',  'Black'],
+" 				\ 'bg1':        ['#232433',   '236',  'DarkGrey'],
+" 				\ 'bg2':        ['#2a2b3d',   '236',  'DarkGrey'],
+" 				\ 'bg3':        ['#32344a',   '237',  'DarkGrey'],
+" 				\ 'bg4':        ['#3b3d57',   '237',  'Grey'],
+" 				\ 'bg_red':     ['#ff7a93',   '203',  'Red'],
+" 				\ 'diff_red':   ['#803d49',   '52',   'DarkRed'],
+" 				\ 'bg_green':   ['#b9f27c',   '107',  'Green'],
+" 				\ 'diff_green': ['#618041',   '22',   'DarkGreen'],
+" 				\ 'bg_blue':    ['#7da6ff',   '110',  'Blue'],
+" 				\ 'diff_blue':  ['#3e5380',   '17',   'DarkBlue'],
+" 				\ 'fg':         ['#a9b1d6',   '250',  'White'],
+" 				\ 'red':        ['#F7768E',   '203',  'Red'],
+" 				\ 'orange':     ['#FF9E64',   '215',  'Orange'],
+" 				\ 'yellow':     ['#E0AF68',   '179',  'Yellow'],
+" 				\ 'green':      ['#9ECE6A',   '107',  'Green'],
+" 				\ 'blue':       ['#7AA2F7',   '110',  'Blue'],
+" 				\ 'purple':     ['#ad8ee6',   '176',  'Magenta'],
+" 				\ 'grey':       ['#444B6A',   '246',  'LightGrey'],
+" 				\ 'none':       ['NONE',      'NONE', 'NONE']
+" 				\ }
+" elseif s:configuration.style ==# 'storm'
+" 	let s:palette = {
+" 				\ 'black':      ['#06080a',   '237',  'DarkGrey'],
+" 				\ 'bg0':        ['#24283b',   '235',  'Black'],
+" 				\ 'bg1':        ['#282d42',   '236',  'DarkGrey'],
+" 				\ 'bg2':        ['#2f344d',   '236',  'DarkGrey'],
+" 				\ 'bg3':        ['#333954',   '237',  'DarkGrey'],
+" 				\ 'bg4':        ['#3a405e',   '237',  'Grey'],
+" 				\ 'bg_red':     ['#ff7a93',   '203',  'Red'],
+" 				\ 'diff_red':   ['#803d49',   '52',   'DarkRed'],
+" 				\ 'bg_green':   ['#b9f27c',   '107',  'Green'],
+" 				\ 'diff_green': ['#618041',   '22',   'DarkGreen'],
+" 				\ 'bg_blue':    ['#7da6ff',   '110',  'Blue'],
+" 				\ 'diff_blue':  ['#3e5380',   '17',   'DarkBlue'],
+" 				\ 'fg':         ['#a9b1d6',   '250',  'White'],
+" 				\ 'red':        ['#F7768E',   '203',  'Red'],
+" 				\ 'orange':     ['#FF9E64',   '215',  'Orange'],
+" 				\ 'yellow':     ['#E0AF68',   '179',  'Yellow'],
+" 				\ 'green':      ['#9ECE6A',   '107',  'Green'],
+" 				\ 'blue':       ['#7AA2F7',   '110',  'Blue'],
+" 				\ 'purple':     ['#ad8ee6',   '176',  'Magenta'],
+" 				\ 'grey':       ['#444B6A',   '246',  'LightGrey'],
+" 				\ 'none':       ['NONE',      'NONE', 'NONE']
+" 				\ }
+" endif
+" if (has('termguicolors') && &termguicolors) || has('gui_running')  " guifg guibg gui cterm guisp
+" 	function! s:HL(group, fg, bg, ...)
+" 		let hl_string = [ 'highlight', a:group, 'guifg=' . a:fg[0], 'guibg=' . a:bg[0], ]
+" 		if a:0 >= 1
+" 			if a:1 ==# 'undercurl'
+" 				if !s:tmux|call add(hl_string, 'gui=undercurl')
+" 				else|call add(hl_string, 'gui=underline')
+" 				endif
+" 				call add(hl_string, 'cterm=underline')
+" 			else|call add(hl_string, 'gui=' . a:1)|call add(hl_string, 'cterm=' . a:1)
+" 			endif
+" 		else|call add(hl_string, 'gui=NONE')|call add(hl_string, 'cterm=NONE')
+" 		endif
+" 		if a:0 >= 2|call add(hl_string, 'guisp=' . a:2[0])|endif
+" 		execute join(hl_string, ' ')
+" 	endfunction
+" elseif s:t_Co >= 256
+" 	function! s:HL(group, fg, bg, ...)
+" 		let hl_string = [ 'highlight', a:group, 'ctermfg=' . a:fg[1], 'ctermbg=' . a:bg[1]]
+" 		if a:0 >= 1
+" 			if a:1 ==# 'undercurl'|call add(hl_string, 'cterm=underline')
+" 			else|call add(hl_string, 'cterm=' . a:1)
+" 			endif
+" 		else|call add(hl_string, 'cterm=NONE')
+" 		endif
+" 		execute join(hl_string, ' ')
+" 	endfunction
+" else  " ctermfg ctermbg cterm
+" 	function! s:HL(group, fg, bg, ...)
+" 		let hl_string = [ 'highlight', a:group, 'ctermfg=' . a:fg[2], 'ctermbg=' . a:bg[2]]
+" 		if a:0 >= 1
+" 			if a:1 ==# 'undercurl'|call add(hl_string, 'cterm=underline')
+" 			else|call add(hl_string, 'cterm=' . a:1)
+" 			endif
+" 		else|call add(hl_string, 'cterm=NONE')
+" 		endif
+" 		execute join(hl_string, ' ')
+" 	endfunction
+" endif
+" if s:configuration.transparent_background
+" 	call s:HL('Normal', s:palette.fg, s:palette.none)
+" 	call s:HL('Terminal', s:palette.fg, s:palette.none)
+" 	call s:HL('EndOfBuffer', s:palette.bg0, s:palette.none)
+" 	call s:HL('FoldColumn', s:palette.grey, s:palette.none)
+" 	call s:HL('Folded', s:palette.grey, s:palette.none)
+" 	call s:HL('SignColumn', s:palette.fg, s:palette.none)
+" 	call s:HL('ToolbarLine', s:palette.fg, s:palette.none)
+" else
+" 	call s:HL('Normal', s:palette.fg, s:palette.bg0)
+" 	call s:HL('Terminal', s:palette.fg, s:palette.bg0)
+" 	call s:HL('EndOfBuffer', s:palette.bg0, s:palette.bg0)
+" 	call s:HL('FoldColumn', s:palette.grey, s:palette.bg1)
+" 	call s:HL('Folded', s:palette.grey, s:palette.bg1)
+" 	call s:HL('SignColumn', s:palette.fg, s:palette.bg1)
+" 	call s:HL('ToolbarLine', s:palette.fg, s:palette.bg2)
+" endif
+" call s:HL('ColorColumn', s:palette.none, s:palette.bg1)
+" call s:HL('Conceal', s:palette.grey, s:palette.none)
+" if s:configuration.cursor ==# 'auto'|call s:HL('Cursor', s:palette.none, s:palette.none, 'reverse')
+" elseif s:configuration.cursor ==# 'red'|call s:HL('Cursor', s:palette.bg0, s:palette.red)
+" elseif s:configuration.cursor ==# 'green'|call s:HL('Cursor', s:palette.bg0, s:palette.green)
+" elseif s:configuration.cursor ==# 'blue'|call s:HL('Cursor', s:palette.bg0, s:palette.blue)
+" endif
+" highlight! link vCursor Cursor
+" highlight! link iCursor Cursor
+" highlight! link lCursor Cursor
+" highlight! link CursorIM Cursor
+" call s:HL('CursorColumn', s:palette.none, s:palette.bg1)
+" call s:HL('CursorLine', s:palette.none, s:palette.bg1)
+" call s:HL('LineNr', s:palette.grey, s:palette.none)
+" if &relativenumber == 1 && &cursorline == 0|call s:HL('CursorLineNr', s:palette.fg, s:palette.none)
+" else|call s:HL('CursorLineNr', s:palette.fg, s:palette.bg1)
+" endif
+" call s:HL('DiffAdd', s:palette.none, s:palette.diff_green)
+" call s:HL('DiffChange', s:palette.none, s:palette.diff_blue)
+" call s:HL('DiffDelete', s:palette.none, s:palette.diff_red)
+" call s:HL('DiffText', s:palette.none, s:palette.none, 'reverse')
+" call s:HL('Directory', s:palette.green, s:palette.none)
+" call s:HL('ErrorMsg', s:palette.red, s:palette.none, 'bold,underline')
+" call s:HL('WarningMsg', s:palette.yellow, s:palette.none, 'bold')
+" call s:HL('ModeMsg', s:palette.fg, s:palette.none, 'bold')
+" call s:HL('MoreMsg', s:palette.blue, s:palette.none, 'bold')
+" call s:HL('IncSearch', s:palette.bg0, s:palette.bg_red)
+" call s:HL('Search', s:palette.bg0, s:palette.bg_green)
+" call s:HL('MatchParen', s:palette.none, s:palette.bg4)
+" call s:HL('NonText', s:palette.bg4, s:palette.none)
+" call s:HL('Whitespace', s:palette.bg4, s:palette.none)
+" call s:HL('SpecialKey', s:palette.bg4, s:palette.none)
+" call s:HL('Pmenu', s:palette.fg, s:palette.bg2)
+" call s:HL('PmenuSbar', s:palette.none, s:palette.bg2)
+" if s:configuration.menu_selection_background ==# 'blue'
+" 	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_blue)
+" 	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_blue)
+" elseif s:configuration.menu_selection_background ==# 'green'
+" 	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_green)
+" 	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_green)
+" elseif s:configuration.menu_selection_background ==# 'red'
+" 	call s:HL('PmenuSel', s:palette.bg0, s:palette.bg_red)
+" 	call s:HL('WildMenu', s:palette.bg0, s:palette.bg_red)
+" endif
+" call s:HL('PmenuThumb', s:palette.none, s:palette.grey)
+" call s:HL('Question', s:palette.yellow, s:palette.none)
+" call s:HL('SpellBad', s:palette.red, s:palette.none, 'undercurl', s:palette.red)
+" call s:HL('SpellCap', s:palette.yellow, s:palette.none, 'undercurl', s:palette.yellow)
+" call s:HL('SpellLocal', s:palette.blue, s:palette.none, 'undercurl', s:palette.blue)
+" call s:HL('SpellRare', s:palette.purple, s:palette.none, 'undercurl', s:palette.purple)
+" call s:HL('StatusLine', s:palette.fg, s:palette.bg3)
+" call s:HL('StatusLineTerm', s:palette.fg, s:palette.bg3)
+" call s:HL('StatusLineNC', s:palette.grey, s:palette.bg1)
+" call s:HL('StatusLineTermNC', s:palette.grey, s:palette.bg1)
+" call s:HL('TabLine', s:palette.fg, s:palette.bg4)
+" call s:HL('TabLineFill', s:palette.grey, s:palette.bg1)
+" call s:HL('TabLineSel', s:palette.bg0, s:palette.bg_red)
+" call s:HL('VertSplit', s:palette.black, s:palette.none)
+" call s:HL('Visual', s:palette.none, s:palette.bg3)
+" call s:HL('VisualNOS', s:palette.none, s:palette.bg3, 'underline')
+" call s:HL('QuickFixLine', s:palette.blue, s:palette.none, 'bold')
+" call s:HL('Debug', s:palette.yellow, s:palette.none)
+" call s:HL('debugPC', s:palette.bg0, s:palette.green)
+" call s:HL('debugBreakpoint', s:palette.bg0, s:palette.red)
+" call s:HL('ToolbarButton', s:palette.bg0, s:palette.bg_blue)
+" call s:HL('Type', s:palette.blue, s:palette.none, 'italic')
+" call s:HL('Structure', s:palette.blue, s:palette.none, 'italic')
+" call s:HL('StorageClass', s:palette.blue, s:palette.none, 'italic')
+" call s:HL('Identifier', s:palette.orange, s:palette.none, 'italic')
+" call s:HL('Constant', s:palette.orange, s:palette.none, 'italic')
+" call s:HL('PreProc', s:palette.red, s:palette.none)
+" call s:HL('PreCondit', s:palette.red, s:palette.none)
+" call s:HL('Include', s:palette.red, s:palette.none)
+" call s:HL('Keyword', s:palette.red, s:palette.none)
+" call s:HL('Define', s:palette.red, s:palette.none)
+" call s:HL('Typedef', s:palette.red, s:palette.none)
+" call s:HL('Exception', s:palette.red, s:palette.none)
+" call s:HL('Conditional', s:palette.red, s:palette.none)
+" call s:HL('Repeat', s:palette.red, s:palette.none)
+" call s:HL('Statement', s:palette.red, s:palette.none)
+" call s:HL('Macro', s:palette.purple, s:palette.none)
+" call s:HL('Error', s:palette.red, s:palette.none)
+" call s:HL('Label', s:palette.purple, s:palette.none)
+" call s:HL('Special', s:palette.purple, s:palette.none)
+" call s:HL('SpecialChar', s:palette.purple, s:palette.none)
+" call s:HL('Boolean', s:palette.purple, s:palette.none)
+" call s:HL('String', s:palette.yellow, s:palette.none)
+" call s:HL('Character', s:palette.yellow, s:palette.none)
+" call s:HL('Number', s:palette.purple, s:palette.none)
+" call s:HL('Float', s:palette.purple, s:palette.none)
+" call s:HL('Function', s:palette.green, s:palette.none)
+" call s:HL('Operator', s:palette.red, s:palette.none)
+" call s:HL('Title', s:palette.red, s:palette.none, 'bold')
+" call s:HL('Tag', s:palette.orange, s:palette.none)
+" call s:HL('Delimiter', s:palette.fg, s:palette.none)
+" call s:HL('Comment', s:palette.grey, s:palette.none, 'italic')
+" call s:HL('SpecialComment', s:palette.grey, s:palette.none, 'italic')
+" call s:HL('Todo', s:palette.blue, s:palette.none, 'italic')
+" call s:HL('Ignore', s:palette.grey, s:palette.none)
+" call s:HL('Underlined', s:palette.none, s:palette.none, 'underline')
+" call s:HL('Fg', s:palette.fg, s:palette.none)
+" call s:HL('Grey', s:palette.grey, s:palette.none)
+" call s:HL('Red', s:palette.red, s:palette.none)
+" call s:HL('Orange', s:palette.orange, s:palette.none)
+" call s:HL('Yellow', s:palette.yellow, s:palette.none)
+" call s:HL('Green', s:palette.green, s:palette.none)
+" call s:HL('Blue', s:palette.blue, s:palette.none)
+" call s:HL('Purple', s:palette.purple, s:palette.none)
+" call s:HL('RedItalic', s:palette.red, s:palette.none, 'italic')
+" call s:HL('BlueItalic', s:palette.blue, s:palette.none, 'italic')
+" call s:HL('OrangeItalic', s:palette.orange, s:palette.none, 'italic')
+" let s:terminal = {
+" 			\ 'black':s:palette.black,'red':s:palette.red,'yellow':s:palette.yellow,'green':s:palette.green,
+" 			\ 'cyan':s:palette.orange,'blue':s:palette.blue,'purple':s:palette.purple,'white':s:palette.fg
+" 			\ }
+" let g:terminal_ansi_colors = [s:terminal.black[0], s:terminal.red[0], s:terminal.green[0], s:terminal.yellow[0],
+" 			\ s:terminal.blue[0], s:terminal.purple[0], s:terminal.cyan[0], s:terminal.white[0], s:terminal.black[0], s:terminal.red[0],
+" 			\ s:terminal.green[0], s:terminal.yellow[0], s:terminal.blue[0], s:terminal.purple[0], s:terminal.cyan[0], s:terminal.white[0]]
 
-" vim: set fen ft=vim fdm=marker fmr={{{,}}}:
+" " vim: set fen ft=vim fdm=marker fmr={{{,}}}:
 
+set background=dark
+
+highlight clear
+
+if exists("syntax_on")
+  syntax reset
+endif
+
+set t_Co=256
+
+let g:colors_name="onedark"
+
+" Set to "256" for 256-color terminals, or
+" set to "16" to use your terminal emulator's native colors
+" (a 16-color palette for this color scheme is available; see
+" < https://github.com/joshdick/onedark.vim/blob/master/README.md >
+" for more information.)
+if !exists("g:onedark_termcolors")
+  let g:onedark_termcolors = 256
+endif
+
+" Not all terminals support italics properly. If yours does, opt-in.
+if !exists("g:onedark_terminal_italics")
+  let g:onedark_terminal_italics = 0
+endif
+
+" This function is based on one from FlatColor: https://github.com/MaxSt/FlatColor/
+" Which in turn was based on one found in hemisu: https://github.com/noahfrederick/vim-hemisu/
+function! s:h(group, style)
+  if g:onedark_terminal_italics == 0
+    if has_key(a:style, "cterm") && a:style["cterm"] == "italic"
+      unlet a:style.cterm
+    endif
+    if has_key(a:style, "gui") && a:style["gui"] == "italic"
+      unlet a:style.gui
+    endif
+  endif
+  if g:onedark_termcolors == 16
+    let l:ctermfg = (has_key(a:style, "fg") ? a:style.fg.cterm16 : "NONE")
+    let l:ctermbg = (has_key(a:style, "bg") ? a:style.bg.cterm16 : "NONE")
+  else
+    let l:ctermfg = (has_key(a:style, "fg") ? a:style.fg.cterm : "NONE")
+    let l:ctermbg = (has_key(a:style, "bg") ? a:style.bg.cterm : "NONE")
+  endif
+  execute "highlight" a:group
+    \ "guifg="   (has_key(a:style, "fg")    ? a:style.fg.gui   : "NONE")
+    \ "guibg="   (has_key(a:style, "bg")    ? a:style.bg.gui   : "NONE")
+    \ "guisp="   (has_key(a:style, "sp")    ? a:style.sp.gui   : "NONE")
+    \ "gui="     (has_key(a:style, "gui")   ? a:style.gui      : "NONE")
+    \ "ctermfg=" . l:ctermfg
+    \ "ctermbg=" . l:ctermbg
+    \ "cterm="   (has_key(a:style, "cterm") ? a:style.cterm    : "NONE")
+endfunction
+
+" +-----------------+
+" | Color Variables |
+" +-----------------+
+
+let s:red = { "gui": "#E06C75", "cterm": "204", "cterm16": "1" } " Alternate cterm: 168
+let s:dark_red = { "gui": "#BE5046", "cterm": "196", "cterm16": "9" }
+
+let s:green = { "gui": "#98C379", "cterm": "114", "cterm16": "2" }
+
+let s:yellow = { "gui": "#E5C07b", "cterm": "180", "cterm16": "3" }
+let s:dark_yellow = { "gui": "#D19A66", "cterm": "173", "cterm16": "11" }
+
+let s:blue = { "gui": "#61AFEF", "cterm": "39", "cterm16": "4" } " Alternate cterm: 75
+
+let s:purple = { "gui": "#C678DD", "cterm": "170", "cterm16": "5" } " Alternate cterm: 176
+
+let s:cyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" } " Alternate cterm: 73
+
+let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
+
+let s:black = { "gui": "#282C34", "cterm": "235", "cterm16": "0" }
+let s:visual_black = { "gui": "NONE", "cterm": "NONE", "cterm16": s:black.cterm16 } " Black out selected text in 16-color visual mode
+
+let s:comment_grey = { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
+let s:gutter_fg_grey = { "gui": "#636D83", "cterm": "238", "cterm16": "15" }
+let s:cursor_grey =  { "gui": "#2C323C", "cterm": "236", "cterm16": "8" }
+let s:visual_grey = { "gui": "#3E4452", "cterm": "237", "cterm16": "15" }
+let s:menu_grey = { "gui": s:visual_grey.gui, "cterm": s:visual_grey.cterm, "cterm16": "8" }
+let s:special_grey = { "gui": "#3B4048", "cterm": "238", "cterm16": "15" }
+let s:vertsplit = { "gui": "#181A1F", "cterm": "59", "cterm16": "15" }
+
+" +---------------------------------------------------------+
+" | Syntax Groups (descriptions and ordering from `:h w18`) |
+" +---------------------------------------------------------+
+
+call s:h("Comment", { "fg": s:comment_grey, "gui": "italic", "cterm": "italic" }) " any comment
+call s:h("Constant", { "fg": s:cyan }) " any constant
+call s:h("String", { "fg": s:green }) " a string constant: "this is a string"
+call s:h("Character", { "fg": s:green }) " a character constant: 'c', '\n'
+call s:h("Number", { "fg": s:dark_yellow }) " a number constant: 234, 0xff
+call s:h("Boolean", { "fg": s:dark_yellow }) " a boolean constant: TRUE, false
+call s:h("Float", { "fg": s:dark_yellow }) " a floating point constant: 2.3e10
+call s:h("Identifier", { "fg": s:red }) " any variable name
+call s:h("Function", { "fg": s:blue }) " function name (also: methods for classes)
+call s:h("Statement", { "fg": s:purple }) " any statement
+call s:h("Conditional", { "fg": s:purple }) " if, then, else, endif, switch, etc.
+call s:h("Repeat", { "fg": s:purple }) " for, do, while, etc.
+call s:h("Label", { "fg": s:purple }) " case, default, etc.
+call s:h("Operator", { "fg": s:purple }) " sizeof", "+", "*", etc.
+call s:h("Keyword", { "fg": s:red }) " any other keyword
+call s:h("Exception", { "fg": s:purple }) " try, catch, throw
+call s:h("PreProc", { "fg": s:yellow }) " generic Preprocessor
+call s:h("Include", { "fg": s:blue }) " preprocessor #include
+call s:h("Define", { "fg": s:purple }) " preprocessor #define
+call s:h("Macro", { "fg": s:purple }) " same as Define
+call s:h("PreCondit", { "fg": s:yellow }) " preprocessor #if, #else, #endif, etc.
+call s:h("Type", { "fg": s:yellow }) " int, long, char, etc.
+call s:h("StorageClass", { "fg": s:yellow }) " static, register, volatile, etc.
+call s:h("Structure", { "fg": s:yellow }) " struct, union, enum, etc.
+call s:h("Typedef", { "fg": s:yellow }) " A typedef
+call s:h("Special", { "fg": s:blue }) " any special symbol
+call s:h("SpecialChar", {}) " special character in a constant
+call s:h("Tag", {}) " you can use CTRL-] on this
+call s:h("Delimiter", {}) " character that needs attention
+call s:h("SpecialComment", {}) " special things inside a comment
+call s:h("Debug", {}) " debugging statements
+call s:h("Underlined", {}) " text that stands out, HTML links
+call s:h("Ignore", {}) " left blank, hidden
+call s:h("Error", { "fg": s:red }) " any erroneous construct
+call s:h("Todo", { "fg": s:purple }) " anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+
+" +----------------------------------------------------------------------+
+" | Highlighting Groups (descriptions and ordering from `:h hitest.vim`) |
+" +----------------------------------------------------------------------+
+
+call s:h("ColorColumn", { "bg": s:cursor_grey }) " used for the columns set with 'colorcolumn'
+call s:h("Conceal", {}) " placeholder characters substituted for concealed text (see 'conceallevel')
+call s:h("Cursor", { "fg": s:black, "bg": s:blue }) " the character under the cursor
+call s:h("CursorIM", {}) " like Cursor, but used when in IME mode
+call s:h("CursorColumn", { "bg": s:cursor_grey }) " the screen column that the cursor is in when 'cursorcolumn' is set
+call s:h("CursorLine", { "bg": s:cursor_grey }) " the screen line that the cursor is in when 'cursorline' is set
+call s:h("Directory", { "fg": s:blue }) " directory names (and other special names in listings)
+call s:h("DiffAdd", { "fg": s:green }) " diff mode: Added line
+call s:h("DiffChange", { "fg": s:dark_yellow }) " diff mode: Changed line
+call s:h("DiffDelete", { "fg": s:red }) " diff mode: Deleted line
+call s:h("DiffText", { "fg": s:blue }) " diff mode: Changed text within a changed line
+call s:h("ErrorMsg", {}) " error messages on the command line
+call s:h("VertSplit", { "fg": s:vertsplit }) " the column separating vertically split windows
+call s:h("Folded", { "fg": s:comment_grey }) " line used for closed folds
+call s:h("FoldColumn", {}) " 'foldcolumn'
+call s:h("SignColumn", {}) " column where signs are displayed
+call s:h("IncSearch", { "fg": s:black, "bg": s:yellow }) " 'incsearch' highlighting; also used for the text replaced with ":s///c"
+call s:h("LineNr", { "fg": s:gutter_fg_grey }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+call s:h("CursorLineNr", {}) " Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+call s:h("MatchParen", { "fg": s:blue, "gui": "underline" }) " The character under the cursor or just before it, if it is a paired bracket, and its match.
+call s:h("ModeMsg", {}) " 'showmode' message (e.g., "-- INSERT --")
+call s:h("MoreMsg", {}) " more-prompt
+call s:h("NonText", { "fg": s:special_grey }) " '~' and '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line).
+call s:h("Normal", { "fg": s:white, "bg": s:black }) " normal text
+call s:h("Pmenu", { "bg": s:menu_grey }) " Popup menu: normal item.
+call s:h("PmenuSel", { "bg": s:black }) " Popup menu: selected item.
+call s:h("PmenuSbar", { "bg": s:special_grey }) " Popup menu: scrollbar.
+call s:h("PmenuThumb", { "bg": s:white }) " Popup menu: Thumb of the scrollbar.
+call s:h("Question", { "fg": s:purple }) " hit-enter prompt and yes/no questions
+call s:h("Search", { "fg": s:black, "bg": s:yellow }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
+call s:h("SpecialKey", { "fg": s:special_grey }) " Meta and special keys listed with ":map", also for text used to show unprintable characters in the text, 'listchars'. Generally: text that is displayed differently from what it really is.
+call s:h("SpellBad", { "fg": s:red, "gui": "underline", "cterm": "underline" }) " Word that is not recognized by the spellchecker. This will be combined with the highlighting used otherwise.
+call s:h("SpellCap", { "fg": s:dark_yellow }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
+call s:h("SpellLocal", { "fg": s:dark_yellow }) " Word that is recognized by the spellchecker as one that is used in another region. This will be combined with the highlighting used otherwise.
+call s:h("SpellRare", { "fg": s:dark_yellow }) " Word that is recognized by the spellchecker as one that is hardly ever used. spell This will be combined with the highlighting used otherwise.
+call s:h("StatusLine", { "fg": s:white, "bg": s:cursor_grey }) " status line of current window
+call s:h("StatusLineNC", { "fg": s:comment_grey }) " status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+call s:h("TabLine", { "fg": s:comment_grey }) " tab pages line, not active tab page label
+call s:h("TabLineFill", {}) " tab pages line, where there are no labels
+call s:h("TabLineSel", { "fg": s:white }) " tab pages line, active tab page label
+call s:h("Title", { "fg": s:green }) " titles for output from ":set all", ":autocmd" etc.
+call s:h("Visual", { "fg": s:visual_black, "bg": s:visual_grey }) " Visual mode selection
+call s:h("VisualNOS", { "bg": s:visual_grey }) " Visual mode selection when vim is "Not Owning the Selection". Only X11 Gui's gui-x11 and xterm-clipboard supports this.
+call s:h("WarningMsg", { "fg": s:red }) " warning messages
+call s:h("WildMenu", {}) " current match in 'wildmenu' completion
+
+" +--------------------------------+
+" | Language-Specific Highlighting |
+" +--------------------------------+
+
+" CSS
+call s:h("cssAttrComma", { "fg": s:purple })
+call s:h("cssAttributeSelector", { "fg": s:green })
+call s:h("cssBraces", { "fg": s:white })
+call s:h("cssClassName", { "fg": s:dark_yellow })
+call s:h("cssClassNameDot", { "fg": s:dark_yellow })
+call s:h("cssDefinition", { "fg": s:purple })
+call s:h("cssFontAttr", { "fg": s:dark_yellow })
+call s:h("cssFontDescriptor", { "fg": s:purple })
+call s:h("cssFunctionName", { "fg": s:blue })
+call s:h("cssIdentifier", { "fg": s:blue })
+call s:h("cssImportant", { "fg": s:purple })
+call s:h("cssInclude", { "fg": s:white })
+call s:h("cssIncludeKeyword", { "fg": s:purple })
+call s:h("cssMediaType", { "fg": s:dark_yellow })
+call s:h("cssProp", { "fg": s:white })
+call s:h("cssPseudoClassId", { "fg": s:dark_yellow })
+call s:h("cssSelectorOp", { "fg": s:purple })
+call s:h("cssSelectorOp2", { "fg": s:purple })
+call s:h("cssTagName", { "fg": s:red })
+
+" HTML
+call s:h("htmlTitle", { "fg": s:white })
+call s:h("htmlArg", { "fg": s:dark_yellow })
+call s:h("htmlEndTag", { "fg": s:white })
+call s:h("htmlH1", { "fg": s:white })
+call s:h("htmlLink", { "fg": s:purple })
+call s:h("htmlSpecialChar", { "fg": s:dark_yellow })
+call s:h("htmlSpecialTagName", { "fg": s:red })
+call s:h("htmlTag", { "fg": s:white })
+call s:h("htmlTagName", { "fg": s:red })
+
+" JavaScript
+call s:h("javaScriptBraces", { "fg": s:white })
+call s:h("javaScriptFunction", { "fg": s:purple })
+call s:h("javaScriptIdentifier", { "fg": s:purple })
+call s:h("javaScriptNull", { "fg": s:dark_yellow })
+call s:h("javaScriptNumber", { "fg": s:dark_yellow })
+call s:h("javaScriptRequire", { "fg": s:cyan })
+call s:h("javaScriptReserved", { "fg": s:purple })
+" https://github.com/pangloss/vim-javascript
+call s:h("jsArrowFunction", { "fg": s:purple })
+call s:h("jsClassKeywords", { "fg": s:purple })
+call s:h("jsDocParam", { "fg": s:blue })
+call s:h("jsDocTags", { "fg": s:purple })
+call s:h("jsFuncCall", { "fg": s:blue })
+call s:h("jsFunction", { "fg": s:purple })
+call s:h("jsGlobalObjects", { "fg": s:yellow })
+call s:h("jsModuleWords", { "fg": s:purple })
+call s:h("jsModules", { "fg": s:purple })
+call s:h("jsNull", { "fg": s:dark_yellow })
+call s:h("jsOperator", { "fg": s:purple })
+call s:h("jsStorageClass", { "fg": s:purple })
+call s:h("jsTemplateBraces", { "fg": s:dark_red })
+call s:h("jsTemplateVar", { "fg": s:green })
+call s:h("jsThis", { "fg": s:red })
+call s:h("jsUndefined", { "fg": s:dark_yellow })
+" https://github.com/othree/yajs.vim
+call s:h("javascriptArrowFunc", { "fg": s:purple })
+call s:h("javascriptClassExtends", { "fg": s:purple })
+call s:h("javascriptClassKeyword", { "fg": s:purple })
+call s:h("javascriptDocNotation", { "fg": s:purple })
+call s:h("javascriptDocParamName", { "fg": s:blue })
+call s:h("javascriptDocTags", { "fg": s:purple })
+call s:h("javascriptEndColons", { "fg": s:white })
+call s:h("javascriptExport", { "fg": s:purple })
+call s:h("javascriptFuncArg", { "fg": s:white })
+call s:h("javascriptFuncKeyword", { "fg": s:purple })
+call s:h("javascriptIdentifier", { "fg": s:red })
+call s:h("javascriptImport", { "fg": s:purple })
+call s:h("javascriptObjectLabel", { "fg": s:white })
+call s:h("javascriptOpSymbol", { "fg": s:cyan })
+call s:h("javascriptOpSymbols", { "fg": s:cyan })
+call s:h("javascriptPropertyName", { "fg": s:green })
+call s:h("javascriptTemplateSB", { "fg": s:dark_red })
+call s:h("javascriptVariable", { "fg": s:purple })
+
+" JSON
+call s:h("jsonCommentError", { "fg": s:white })
+call s:h("jsonKeyword", { "fg": s:red })
+call s:h("jsonBoolean", { "fg": s:dark_yellow })
+call s:h("jsonNumber", { "fg": s:dark_yellow })
+call s:h("jsonQuote", { "fg": s:white })
+call s:h("jsonMissingCommaError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNoQuotesError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNumError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonString", { "fg": s:green })
+call s:h("jsonStringSQError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonSemicolonError", { "fg": s:red, "gui": "reverse" })
+
+" Markdown
+call s:h("markdownCode", { "fg": s:green })
+call s:h("markdownCodeBlock", { "fg": s:green })
+call s:h("markdownCodeDelimiter", { "fg": s:green })
+call s:h("markdownHeadingDelimiter", { "fg": s:red })
+call s:h("markdownRule", { "fg": s:comment_grey })
+call s:h("markdownHeadingRule", { "fg": s:comment_grey })
+call s:h("markdownH1", { "fg": s:red })
+call s:h("markdownH2", { "fg": s:red })
+call s:h("markdownH3", { "fg": s:red })
+call s:h("markdownH4", { "fg": s:red })
+call s:h("markdownH5", { "fg": s:red })
+call s:h("markdownH6", { "fg": s:red })
+call s:h("markdownIdDelimiter", { "fg": s:purple })
+call s:h("markdownId", { "fg": s:purple })
+call s:h("markdownBlockquote", { "fg": s:comment_grey })
+call s:h("markdownItalic", { "fg": s:purple, "gui": "italic", "cterm": "italic" })
+call s:h("markdownBold", { "fg": s:dark_yellow, "gui": "bold", "cterm": "bold" })
+call s:h("markdownListMarker", { "fg": s:red })
+call s:h("markdownOrderedListMarker", { "fg": s:red })
+call s:h("markdownIdDeclaration", { "fg": s:blue })
+call s:h("markdownLinkText", { "fg": s:blue })
+call s:h("markdownLinkDelimiter", { "fg": s:white })
+call s:h("markdownUrl", { "fg": s:purple })
+
+" Ruby
+call s:h("rubyBlockParameter", { "fg": s:red})
+call s:h("rubyBlockParameterList", { "fg": s:red })
+call s:h("rubyClass", { "fg": s:purple})
+call s:h("rubyConstant", { "fg": s:yellow})
+call s:h("rubyControl", { "fg": s:purple })
+call s:h("rubyEscape", { "fg": s:red})
+call s:h("rubyFunction", { "fg": s:blue})
+call s:h("rubyGlobalVariable", { "fg": s:red})
+call s:h("rubyInclude", { "fg": s:blue})
+call s:h("rubyIncluderubyGlobalVariable", { "fg": s:red})
+call s:h("rubyInstanceVariable", { "fg": s:red})
+call s:h("rubyInterpolation", { "fg": s:cyan })
+call s:h("rubyInterpolationDelimiter", { "fg": s:red })
+call s:h("rubyInterpolationDelimiter", { "fg": s:red})
+call s:h("rubyRegexp", { "fg": s:cyan})
+call s:h("rubyRegexpDelimiter", { "fg": s:cyan})
+call s:h("rubyStringDelimiter", { "fg": s:green})
+call s:h("rubySymbol", { "fg": s:cyan})
+
+" Sass
+call s:h("sassAmpersand", { "fg": s:red })
+call s:h("sassClass", { "fg": s:dark_yellow })
+call s:h("sassControl", { "fg": s:purple })
+call s:h("sassExtend", { "fg": s:purple })
+call s:h("sassFor", { "fg": s:white })
+call s:h("sassFunction", { "fg": s:cyan })
+call s:h("sassId", { "fg": s:blue })
+call s:h("sassInclude", { "fg": s:purple })
+call s:h("sassMedia", { "fg": s:purple })
+call s:h("sassMediaOperators", { "fg": s:white })
+call s:h("sassMixin", { "fg": s:purple })
+call s:h("sassMixinName", { "fg": s:blue })
+call s:h("sassMixing", { "fg": s:purple })
+
+" TypeScript
+call s:h("typescriptReserved", { "fg": s:purple })
+call s:h("typescriptEndColons", { "fg": s:white })
+call s:h("typescriptBraces", { "fg": s:white })
+
+" XML
+call s:h("xmlAttrib", { "fg": s:dark_yellow })
+call s:h("xmlEndTag", { "fg": s:red })
+call s:h("xmlTag", { "fg": s:red })
+call s:h("xmlTagName", { "fg": s:red })
+
+" +---------------------+
+" | Plugin Highlighting |
+" +---------------------+
+
+" airblade/vim-gitgutter
+hi link GitGutterAdd    SignifySignAdd
+hi link GitGutterChange SignifySignChange
+hi link GitGutterDelete SignifySignDelete
+
+" mhinz/vim-signify
+call s:h("SignifySignAdd", { "fg": s:green })
+call s:h("SignifySignChange", { "fg": s:yellow })
+call s:h("SignifySignDelete", { "fg": s:red })
+
+" neomake/neomake
+call s:h("NeomakeWarningSign", { "fg": s:yellow })
+call s:h("NeomakeErrorSign", { "fg": s:red })
+call s:h("NeomakeInfoSign", { "fg": s:blue })
+
+" tpope/vim-fugitive
+call s:h("diffAdded", { "fg": s:green })
+call s:h("diffRemoved", { "fg": s:red })
+
+" +------------------+
+" | Git Highlighting |
+" +------------------+
+
+call s:h("gitcommitComment", { "fg": s:comment_grey })
+call s:h("gitcommitUnmerged", { "fg": s:green })
+call s:h("gitcommitOnBranch", {})
+call s:h("gitcommitBranch", { "fg": s:purple })
+call s:h("gitcommitDiscardedType", { "fg": s:red })
+call s:h("gitcommitSelectedType", { "fg": s:green })
+call s:h("gitcommitHeader", {})
+call s:h("gitcommitUntrackedFile", { "fg": s:cyan })
+call s:h("gitcommitDiscardedFile", { "fg": s:red })
+call s:h("gitcommitSelectedFile", { "fg": s:green })
+call s:h("gitcommitUnmergedFile", { "fg": s:yellow })
+call s:h("gitcommitFile", {})
+hi link gitcommitNoBranch gitcommitBranch
+hi link gitcommitUntracked gitcommitComment
+hi link gitcommitDiscarded gitcommitComment
+hi link gitcommitSelected gitcommitComment
+hi link gitcommitDiscardedArrow gitcommitDiscardedFile
+hi link gitcommitSelectedArrow gitcommitSelectedFile
+hi link gitcommitUnmergedArrow gitcommitUnmergedFile
+
+" +------------------------+
+" | Neovim terminal colors |
+" +------------------------+
+
+if has("nvim")
+  let g:terminal_color_0 =  s:black.gui
+  let g:terminal_color_1 =  s:red.gui
+  let g:terminal_color_2 =  s:green.gui
+  let g:terminal_color_3 =  s:yellow.gui
+  let g:terminal_color_4 =  s:blue.gui
+  let g:terminal_color_5 =  s:purple.gui
+  let g:terminal_color_6 =  s:cyan.gui
+  let g:terminal_color_7 =  s:white.gui
+  let g:terminal_color_8 =  s:visual_grey.gui
+  let g:terminal_color_9 =  s:dark_red.gui
+  let g:terminal_color_10 = s:green.gui " No dark version
+  let g:terminal_color_11 = s:dark_yellow.gui
+  let g:terminal_color_12 = s:blue.gui " No dark version
+  let g:terminal_color_13 = s:purple.gui " No dark version
+  let g:terminal_color_14 = s:cyan.gui " No dark version
+  let g:terminal_color_15 = s:comment_grey.gui
+  let g:terminal_color_background = g:terminal_color_0
+  let g:terminal_color_foreground = g:terminal_color_7
+endifset background=dark
+
+highlight clear
+
+if exists("syntax_on")
+  syntax reset
+endif
+
+set t_Co=256
+
+let g:colors_name="onedark"
+
+" Set to "256" for 256-color terminals, or
+" set to "16" to use your terminal emulator's native colors
+" (a 16-color palette for this color scheme is available; see
+" < https://github.com/joshdick/onedark.vim/blob/master/README.md >
+" for more information.)
+if !exists("g:onedark_termcolors")
+  let g:onedark_termcolors = 256
+endif
+
+" Not all terminals support italics properly. If yours does, opt-in.
+if !exists("g:onedark_terminal_italics")
+  let g:onedark_terminal_italics = 0
+endif
+
+" This function is based on one from FlatColor: https://github.com/MaxSt/FlatColor/
+" Which in turn was based on one found in hemisu: https://github.com/noahfrederick/vim-hemisu/
+function! s:h(group, style)
+  if g:onedark_terminal_italics == 0
+    if has_key(a:style, "cterm") && a:style["cterm"] == "italic"
+      unlet a:style.cterm
+    endif
+    if has_key(a:style, "gui") && a:style["gui"] == "italic"
+      unlet a:style.gui
+    endif
+  endif
+  if g:onedark_termcolors == 16
+    let l:ctermfg = (has_key(a:style, "fg") ? a:style.fg.cterm16 : "NONE")
+    let l:ctermbg = (has_key(a:style, "bg") ? a:style.bg.cterm16 : "NONE")
+  else
+    let l:ctermfg = (has_key(a:style, "fg") ? a:style.fg.cterm : "NONE")
+    let l:ctermbg = (has_key(a:style, "bg") ? a:style.bg.cterm : "NONE")
+  endif
+  execute "highlight" a:group
+    \ "guifg="   (has_key(a:style, "fg")    ? a:style.fg.gui   : "NONE")
+    \ "guibg="   (has_key(a:style, "bg")    ? a:style.bg.gui   : "NONE")
+    \ "guisp="   (has_key(a:style, "sp")    ? a:style.sp.gui   : "NONE")
+    \ "gui="     (has_key(a:style, "gui")   ? a:style.gui      : "NONE")
+    \ "ctermfg=" . l:ctermfg
+    \ "ctermbg=" . l:ctermbg
+    \ "cterm="   (has_key(a:style, "cterm") ? a:style.cterm    : "NONE")
+endfunction
+
+" +-----------------+
+" | Color Variables |
+" +-----------------+
+
+let s:red = { "gui": "#E06C75", "cterm": "204", "cterm16": "1" } " Alternate cterm: 168
+let s:dark_red = { "gui": "#BE5046", "cterm": "196", "cterm16": "9" }
+
+let s:green = { "gui": "#98C379", "cterm": "114", "cterm16": "2" }
+
+let s:yellow = { "gui": "#E5C07b", "cterm": "180", "cterm16": "3" }
+let s:dark_yellow = { "gui": "#D19A66", "cterm": "173", "cterm16": "11" }
+
+let s:blue = { "gui": "#61AFEF", "cterm": "39", "cterm16": "4" } " Alternate cterm: 75
+
+let s:purple = { "gui": "#C678DD", "cterm": "170", "cterm16": "5" } " Alternate cterm: 176
+
+let s:cyan = { "gui": "#56B6C2", "cterm": "38", "cterm16": "6" } " Alternate cterm: 73
+
+let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
+
+let s:black = { "gui": "#282C34", "cterm": "235", "cterm16": "0" }
+let s:visual_black = { "gui": "NONE", "cterm": "NONE", "cterm16": s:black.cterm16 } " Black out selected text in 16-color visual mode
+
+let s:comment_grey = { "gui": "#5C6370", "cterm": "59", "cterm16": "15" }
+let s:gutter_fg_grey = { "gui": "#636D83", "cterm": "238", "cterm16": "15" }
+let s:cursor_grey =  { "gui": "#2C323C", "cterm": "236", "cterm16": "8" }
+let s:visual_grey = { "gui": "#3E4452", "cterm": "237", "cterm16": "15" }
+let s:menu_grey = { "gui": s:visual_grey.gui, "cterm": s:visual_grey.cterm, "cterm16": "8" }
+let s:special_grey = { "gui": "#3B4048", "cterm": "238", "cterm16": "15" }
+let s:vertsplit = { "gui": "#181A1F", "cterm": "59", "cterm16": "15" }
+
+" +---------------------------------------------------------+
+" | Syntax Groups (descriptions and ordering from `:h w18`) |
+" +---------------------------------------------------------+
+
+call s:h("Comment", { "fg": s:comment_grey, "gui": "italic", "cterm": "italic" }) " any comment
+call s:h("Constant", { "fg": s:cyan }) " any constant
+call s:h("String", { "fg": s:green }) " a string constant: "this is a string"
+call s:h("Character", { "fg": s:green }) " a character constant: 'c', '\n'
+call s:h("Number", { "fg": s:dark_yellow }) " a number constant: 234, 0xff
+call s:h("Boolean", { "fg": s:dark_yellow }) " a boolean constant: TRUE, false
+call s:h("Float", { "fg": s:dark_yellow }) " a floating point constant: 2.3e10
+call s:h("Identifier", { "fg": s:red }) " any variable name
+call s:h("Function", { "fg": s:blue }) " function name (also: methods for classes)
+call s:h("Statement", { "fg": s:purple }) " any statement
+call s:h("Conditional", { "fg": s:purple }) " if, then, else, endif, switch, etc.
+call s:h("Repeat", { "fg": s:purple }) " for, do, while, etc.
+call s:h("Label", { "fg": s:purple }) " case, default, etc.
+call s:h("Operator", { "fg": s:purple }) " sizeof", "+", "*", etc.
+call s:h("Keyword", { "fg": s:red }) " any other keyword
+call s:h("Exception", { "fg": s:purple }) " try, catch, throw
+call s:h("PreProc", { "fg": s:yellow }) " generic Preprocessor
+call s:h("Include", { "fg": s:blue }) " preprocessor #include
+call s:h("Define", { "fg": s:purple }) " preprocessor #define
+call s:h("Macro", { "fg": s:purple }) " same as Define
+call s:h("PreCondit", { "fg": s:yellow }) " preprocessor #if, #else, #endif, etc.
+call s:h("Type", { "fg": s:yellow }) " int, long, char, etc.
+call s:h("StorageClass", { "fg": s:yellow }) " static, register, volatile, etc.
+call s:h("Structure", { "fg": s:yellow }) " struct, union, enum, etc.
+call s:h("Typedef", { "fg": s:yellow }) " A typedef
+call s:h("Special", { "fg": s:blue }) " any special symbol
+call s:h("SpecialChar", {}) " special character in a constant
+call s:h("Tag", {}) " you can use CTRL-] on this
+call s:h("Delimiter", {}) " character that needs attention
+call s:h("SpecialComment", {}) " special things inside a comment
+call s:h("Debug", {}) " debugging statements
+call s:h("Underlined", {}) " text that stands out, HTML links
+call s:h("Ignore", {}) " left blank, hidden
+call s:h("Error", { "fg": s:red }) " any erroneous construct
+call s:h("Todo", { "fg": s:purple }) " anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+
+" +----------------------------------------------------------------------+
+" | Highlighting Groups (descriptions and ordering from `:h hitest.vim`) |
+" +----------------------------------------------------------------------+
+
+call s:h("ColorColumn", { "bg": s:cursor_grey }) " used for the columns set with 'colorcolumn'
+call s:h("Conceal", {}) " placeholder characters substituted for concealed text (see 'conceallevel')
+call s:h("Cursor", { "fg": s:black, "bg": s:blue }) " the character under the cursor
+call s:h("CursorIM", {}) " like Cursor, but used when in IME mode
+call s:h("CursorColumn", { "bg": s:cursor_grey }) " the screen column that the cursor is in when 'cursorcolumn' is set
+call s:h("CursorLine", { "bg": s:cursor_grey }) " the screen line that the cursor is in when 'cursorline' is set
+call s:h("Directory", { "fg": s:blue }) " directory names (and other special names in listings)
+call s:h("DiffAdd", { "fg": s:green }) " diff mode: Added line
+call s:h("DiffChange", { "fg": s:dark_yellow }) " diff mode: Changed line
+call s:h("DiffDelete", { "fg": s:red }) " diff mode: Deleted line
+call s:h("DiffText", { "fg": s:blue }) " diff mode: Changed text within a changed line
+call s:h("ErrorMsg", {}) " error messages on the command line
+call s:h("VertSplit", { "fg": s:vertsplit }) " the column separating vertically split windows
+call s:h("Folded", { "fg": s:comment_grey }) " line used for closed folds
+call s:h("FoldColumn", {}) " 'foldcolumn'
+call s:h("SignColumn", {}) " column where signs are displayed
+call s:h("IncSearch", { "fg": s:black, "bg": s:yellow }) " 'incsearch' highlighting; also used for the text replaced with ":s///c"
+call s:h("LineNr", { "fg": s:gutter_fg_grey }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+call s:h("CursorLineNr", {}) " Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+call s:h("MatchParen", { "fg": s:blue, "gui": "underline" }) " The character under the cursor or just before it, if it is a paired bracket, and its match.
+call s:h("ModeMsg", {}) " 'showmode' message (e.g., "-- INSERT --")
+call s:h("MoreMsg", {}) " more-prompt
+call s:h("NonText", { "fg": s:special_grey }) " '~' and '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line).
+call s:h("Normal", { "fg": s:white, "bg": s:black }) " normal text
+call s:h("Pmenu", { "bg": s:menu_grey }) " Popup menu: normal item.
+call s:h("PmenuSel", { "bg": s:black }) " Popup menu: selected item.
+call s:h("PmenuSbar", { "bg": s:special_grey }) " Popup menu: scrollbar.
+call s:h("PmenuThumb", { "bg": s:white }) " Popup menu: Thumb of the scrollbar.
+call s:h("Question", { "fg": s:purple }) " hit-enter prompt and yes/no questions
+call s:h("Search", { "fg": s:black, "bg": s:yellow }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
+call s:h("SpecialKey", { "fg": s:special_grey }) " Meta and special keys listed with ":map", also for text used to show unprintable characters in the text, 'listchars'. Generally: text that is displayed differently from what it really is.
+call s:h("SpellBad", { "fg": s:red, "gui": "underline", "cterm": "underline" }) " Word that is not recognized by the spellchecker. This will be combined with the highlighting used otherwise.
+call s:h("SpellCap", { "fg": s:dark_yellow }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
+call s:h("SpellLocal", { "fg": s:dark_yellow }) " Word that is recognized by the spellchecker as one that is used in another region. This will be combined with the highlighting used otherwise.
+call s:h("SpellRare", { "fg": s:dark_yellow }) " Word that is recognized by the spellchecker as one that is hardly ever used. spell This will be combined with the highlighting used otherwise.
+call s:h("StatusLine", { "fg": s:white, "bg": s:cursor_grey }) " status line of current window
+call s:h("StatusLineNC", { "fg": s:comment_grey }) " status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+call s:h("TabLine", { "fg": s:comment_grey }) " tab pages line, not active tab page label
+call s:h("TabLineFill", {}) " tab pages line, where there are no labels
+call s:h("TabLineSel", { "fg": s:white }) " tab pages line, active tab page label
+call s:h("Title", { "fg": s:green }) " titles for output from ":set all", ":autocmd" etc.
+call s:h("Visual", { "fg": s:visual_black, "bg": s:visual_grey }) " Visual mode selection
+call s:h("VisualNOS", { "bg": s:visual_grey }) " Visual mode selection when vim is "Not Owning the Selection". Only X11 Gui's gui-x11 and xterm-clipboard supports this.
+call s:h("WarningMsg", { "fg": s:red }) " warning messages
+call s:h("WildMenu", {}) " current match in 'wildmenu' completion
+
+" +--------------------------------+
+" | Language-Specific Highlighting |
+" +--------------------------------+
+
+" CSS
+call s:h("cssAttrComma", { "fg": s:purple })
+call s:h("cssAttributeSelector", { "fg": s:green })
+call s:h("cssBraces", { "fg": s:white })
+call s:h("cssClassName", { "fg": s:dark_yellow })
+call s:h("cssClassNameDot", { "fg": s:dark_yellow })
+call s:h("cssDefinition", { "fg": s:purple })
+call s:h("cssFontAttr", { "fg": s:dark_yellow })
+call s:h("cssFontDescriptor", { "fg": s:purple })
+call s:h("cssFunctionName", { "fg": s:blue })
+call s:h("cssIdentifier", { "fg": s:blue })
+call s:h("cssImportant", { "fg": s:purple })
+call s:h("cssInclude", { "fg": s:white })
+call s:h("cssIncludeKeyword", { "fg": s:purple })
+call s:h("cssMediaType", { "fg": s:dark_yellow })
+call s:h("cssProp", { "fg": s:white })
+call s:h("cssPseudoClassId", { "fg": s:dark_yellow })
+call s:h("cssSelectorOp", { "fg": s:purple })
+call s:h("cssSelectorOp2", { "fg": s:purple })
+call s:h("cssTagName", { "fg": s:red })
+
+" HTML
+call s:h("htmlTitle", { "fg": s:white })
+call s:h("htmlArg", { "fg": s:dark_yellow })
+call s:h("htmlEndTag", { "fg": s:white })
+call s:h("htmlH1", { "fg": s:white })
+call s:h("htmlLink", { "fg": s:purple })
+call s:h("htmlSpecialChar", { "fg": s:dark_yellow })
+call s:h("htmlSpecialTagName", { "fg": s:red })
+call s:h("htmlTag", { "fg": s:white })
+call s:h("htmlTagName", { "fg": s:red })
+
+" JavaScript
+call s:h("javaScriptBraces", { "fg": s:white })
+call s:h("javaScriptFunction", { "fg": s:purple })
+call s:h("javaScriptIdentifier", { "fg": s:purple })
+call s:h("javaScriptNull", { "fg": s:dark_yellow })
+call s:h("javaScriptNumber", { "fg": s:dark_yellow })
+call s:h("javaScriptRequire", { "fg": s:cyan })
+call s:h("javaScriptReserved", { "fg": s:purple })
+" https://github.com/pangloss/vim-javascript
+call s:h("jsArrowFunction", { "fg": s:purple })
+call s:h("jsClassKeywords", { "fg": s:purple })
+call s:h("jsDocParam", { "fg": s:blue })
+call s:h("jsDocTags", { "fg": s:purple })
+call s:h("jsFuncCall", { "fg": s:blue })
+call s:h("jsFunction", { "fg": s:purple })
+call s:h("jsGlobalObjects", { "fg": s:yellow })
+call s:h("jsModuleWords", { "fg": s:purple })
+call s:h("jsModules", { "fg": s:purple })
+call s:h("jsNull", { "fg": s:dark_yellow })
+call s:h("jsOperator", { "fg": s:purple })
+call s:h("jsStorageClass", { "fg": s:purple })
+call s:h("jsTemplateBraces", { "fg": s:dark_red })
+call s:h("jsTemplateVar", { "fg": s:green })
+call s:h("jsThis", { "fg": s:red })
+call s:h("jsUndefined", { "fg": s:dark_yellow })
+" https://github.com/othree/yajs.vim
+call s:h("javascriptArrowFunc", { "fg": s:purple })
+call s:h("javascriptClassExtends", { "fg": s:purple })
+call s:h("javascriptClassKeyword", { "fg": s:purple })
+call s:h("javascriptDocNotation", { "fg": s:purple })
+call s:h("javascriptDocParamName", { "fg": s:blue })
+call s:h("javascriptDocTags", { "fg": s:purple })
+call s:h("javascriptEndColons", { "fg": s:white })
+call s:h("javascriptExport", { "fg": s:purple })
+call s:h("javascriptFuncArg", { "fg": s:white })
+call s:h("javascriptFuncKeyword", { "fg": s:purple })
+call s:h("javascriptIdentifier", { "fg": s:red })
+call s:h("javascriptImport", { "fg": s:purple })
+call s:h("javascriptObjectLabel", { "fg": s:white })
+call s:h("javascriptOpSymbol", { "fg": s:cyan })
+call s:h("javascriptOpSymbols", { "fg": s:cyan })
+call s:h("javascriptPropertyName", { "fg": s:green })
+call s:h("javascriptTemplateSB", { "fg": s:dark_red })
+call s:h("javascriptVariable", { "fg": s:purple })
+
+" JSON
+call s:h("jsonCommentError", { "fg": s:white })
+call s:h("jsonKeyword", { "fg": s:red })
+call s:h("jsonBoolean", { "fg": s:dark_yellow })
+call s:h("jsonNumber", { "fg": s:dark_yellow })
+call s:h("jsonQuote", { "fg": s:white })
+call s:h("jsonMissingCommaError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNoQuotesError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonNumError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonString", { "fg": s:green })
+call s:h("jsonStringSQError", { "fg": s:red, "gui": "reverse" })
+call s:h("jsonSemicolonError", { "fg": s:red, "gui": "reverse" })
+
+" Markdown
+call s:h("markdownCode", { "fg": s:green })
+call s:h("markdownCodeBlock", { "fg": s:green })
+call s:h("markdownCodeDelimiter", { "fg": s:green })
+call s:h("markdownHeadingDelimiter", { "fg": s:red })
+call s:h("markdownRule", { "fg": s:comment_grey })
+call s:h("markdownHeadingRule", { "fg": s:comment_grey })
+call s:h("markdownH1", { "fg": s:red })
+call s:h("markdownH2", { "fg": s:red })
+call s:h("markdownH3", { "fg": s:red })
+call s:h("markdownH4", { "fg": s:red })
+call s:h("markdownH5", { "fg": s:red })
+call s:h("markdownH6", { "fg": s:red })
+call s:h("markdownIdDelimiter", { "fg": s:purple })
+call s:h("markdownId", { "fg": s:purple })
+call s:h("markdownBlockquote", { "fg": s:comment_grey })
+call s:h("markdownItalic", { "fg": s:purple, "gui": "italic", "cterm": "italic" })
+call s:h("markdownBold", { "fg": s:dark_yellow, "gui": "bold", "cterm": "bold" })
+call s:h("markdownListMarker", { "fg": s:red })
+call s:h("markdownOrderedListMarker", { "fg": s:red })
+call s:h("markdownIdDeclaration", { "fg": s:blue })
+call s:h("markdownLinkText", { "fg": s:blue })
+call s:h("markdownLinkDelimiter", { "fg": s:white })
+call s:h("markdownUrl", { "fg": s:purple })
+
+" Ruby
+call s:h("rubyBlockParameter", { "fg": s:red})
+call s:h("rubyBlockParameterList", { "fg": s:red })
+call s:h("rubyClass", { "fg": s:purple})
+call s:h("rubyConstant", { "fg": s:yellow})
+call s:h("rubyControl", { "fg": s:purple })
+call s:h("rubyEscape", { "fg": s:red})
+call s:h("rubyFunction", { "fg": s:blue})
+call s:h("rubyGlobalVariable", { "fg": s:red})
+call s:h("rubyInclude", { "fg": s:blue})
+call s:h("rubyIncluderubyGlobalVariable", { "fg": s:red})
+call s:h("rubyInstanceVariable", { "fg": s:red})
+call s:h("rubyInterpolation", { "fg": s:cyan })
+call s:h("rubyInterpolationDelimiter", { "fg": s:red })
+call s:h("rubyInterpolationDelimiter", { "fg": s:red})
+call s:h("rubyRegexp", { "fg": s:cyan})
+call s:h("rubyRegexpDelimiter", { "fg": s:cyan})
+call s:h("rubyStringDelimiter", { "fg": s:green})
+call s:h("rubySymbol", { "fg": s:cyan})
+
+" Sass
+call s:h("sassAmpersand", { "fg": s:red })
+call s:h("sassClass", { "fg": s:dark_yellow })
+call s:h("sassControl", { "fg": s:purple })
+call s:h("sassExtend", { "fg": s:purple })
+call s:h("sassFor", { "fg": s:white })
+call s:h("sassFunction", { "fg": s:cyan })
+call s:h("sassId", { "fg": s:blue })
+call s:h("sassInclude", { "fg": s:purple })
+call s:h("sassMedia", { "fg": s:purple })
+call s:h("sassMediaOperators", { "fg": s:white })
+call s:h("sassMixin", { "fg": s:purple })
+call s:h("sassMixinName", { "fg": s:blue })
+call s:h("sassMixing", { "fg": s:purple })
+
+" TypeScript
+call s:h("typescriptReserved", { "fg": s:purple })
+call s:h("typescriptEndColons", { "fg": s:white })
+call s:h("typescriptBraces", { "fg": s:white })
+
+" XML
+call s:h("xmlAttrib", { "fg": s:dark_yellow })
+call s:h("xmlEndTag", { "fg": s:red })
+call s:h("xmlTag", { "fg": s:red })
+call s:h("xmlTagName", { "fg": s:red })
+
+" +---------------------+
+" | Plugin Highlighting |
+" +---------------------+
+
+" airblade/vim-gitgutter
+hi link GitGutterAdd    SignifySignAdd
+hi link GitGutterChange SignifySignChange
+hi link GitGutterDelete SignifySignDelete
+
+" mhinz/vim-signify
+call s:h("SignifySignAdd", { "fg": s:green })
+call s:h("SignifySignChange", { "fg": s:yellow })
+call s:h("SignifySignDelete", { "fg": s:red })
+
+" neomake/neomake
+call s:h("NeomakeWarningSign", { "fg": s:yellow })
+call s:h("NeomakeErrorSign", { "fg": s:red })
+call s:h("NeomakeInfoSign", { "fg": s:blue })
+
+" tpope/vim-fugitive
+call s:h("diffAdded", { "fg": s:green })
+call s:h("diffRemoved", { "fg": s:red })
+
+" +------------------+
+" | Git Highlighting |
+" +------------------+
+
+call s:h("gitcommitComment", { "fg": s:comment_grey })
+call s:h("gitcommitUnmerged", { "fg": s:green })
+call s:h("gitcommitOnBranch", {})
+call s:h("gitcommitBranch", { "fg": s:purple })
+call s:h("gitcommitDiscardedType", { "fg": s:red })
+call s:h("gitcommitSelectedType", { "fg": s:green })
+call s:h("gitcommitHeader", {})
+call s:h("gitcommitUntrackedFile", { "fg": s:cyan })
+call s:h("gitcommitDiscardedFile", { "fg": s:red })
+call s:h("gitcommitSelectedFile", { "fg": s:green })
+call s:h("gitcommitUnmergedFile", { "fg": s:yellow })
+call s:h("gitcommitFile", {})
+hi link gitcommitNoBranch gitcommitBranch
+hi link gitcommitUntracked gitcommitComment
+hi link gitcommitDiscarded gitcommitComment
+hi link gitcommitSelected gitcommitComment
+hi link gitcommitDiscardedArrow gitcommitDiscardedFile
+hi link gitcommitSelectedArrow gitcommitSelectedFile
+hi link gitcommitUnmergedArrow gitcommitUnmergedFile
+
+" +------------------------+
+" | Neovim terminal colors |
+" +------------------------+
+
+if has("nvim")
+  let g:terminal_color_0 =  s:black.gui
+  let g:terminal_color_1 =  s:red.gui
+  let g:terminal_color_2 =  s:green.gui
+  let g:terminal_color_3 =  s:yellow.gui
+  let g:terminal_color_4 =  s:blue.gui
+  let g:terminal_color_5 =  s:purple.gui
+  let g:terminal_color_6 =  s:cyan.gui
+  let g:terminal_color_7 =  s:white.gui
+  let g:terminal_color_8 =  s:visual_grey.gui
+  let g:terminal_color_9 =  s:dark_red.gui
+  let g:terminal_color_10 = s:green.gui " No dark version
+  let g:terminal_color_11 = s:dark_yellow.gui
+  let g:terminal_color_12 = s:blue.gui " No dark version
+  let g:terminal_color_13 = s:purple.gui " No dark version
+  let g:terminal_color_14 = s:cyan.gui " No dark version
+  let g:terminal_color_15 = s:comment_grey.gui
+  let g:terminal_color_background = g:terminal_color_0
+  let g:terminal_color_foreground = g:terminal_color_7
+endif
