@@ -66,7 +66,7 @@ function! s:ensure(repo, ...) abort
     endif
   endif
 
-  execute 'set runtimepath+=' . fnameescape(path)
+  execute 'set runtimepath^=' . fnameescape(path)
 endfunction
 
 " Your plugins
