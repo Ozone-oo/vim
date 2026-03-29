@@ -11,3 +11,4 @@ source ~/.vim/nerdtree.vim
 source ~/.vim/outline.vim
 source ~/.vim/bookmark.vim
 " source ~/.vim/lsp_python.vim
+" source ~/.vim/py_mode.vim

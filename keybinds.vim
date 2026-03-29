@@ -150,3 +150,6 @@ nnoremap <Space><Space> zR
 vnoremap <Space><Space> za <Esc>
 
 nnoremap <Esc><Esc> :nohl<CR>
+xnoremap <Tab> >gv
+xnoremap <S-Tab> <gv
+
